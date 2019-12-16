@@ -23,18 +23,18 @@
         <div id="boards">Boards are loading...</div>
         -->
         <div class="container">
-            <div class="row">
+            <div class="row" id="header">
                 <h1>ProMan</h1>
                 <div class="ml-auto">
-                    <button class="btn btn-primary">+ New Board</button>
+                    <button class="btn btn-secondary btn-lg">+ New Board</button>
                 </div>
             </div>
             <div id="boards" class="container">
-                <div class="board mb-3">
+                <div class="board mb-3" id="board-container">
                     <div class="row">
-                        <h3 class="text-left">Test Board 1</h3>
-                        <button class="btn btn-primary text-left">+ New Card</button>
-                        <button class="btn btn-primary ml-auto">Show / Hide</button>
+                        <h3 class="text-left" id="board-title">Test Board 1</h3>
+                        <button class="btn btn-secondary text-left btn-lg">+ New Card</button>
+                        <button class="btn btn-secondary ml-auto btn-lg">Show / Hide</button>
                     </div>
                     <div class="row">
                         <div class="col status" data-board-id="1" data-status-id="1">New</div>
@@ -56,11 +56,11 @@
                         <div class="col"></div>
                     </div>
                 </div>
-                <div class="board mb-3">
+                <div class="board mb-3" id="board-container">
                     <div class="row">
-                        <h3 class="text-left">Test Board 1</h3>
-                        <button class="btn btn-primary text-left">+ New Card</button>
-                        <button class="btn btn-primary ml-auto">Show / Hide</button>
+                        <h3 class="text-left" id="board-title">Test Board 1</h3>
+                        <button class="btn btn-secondary text-left btn-lg">+ New Card</button>
+                        <button class="btn btn-secondary ml-auto btn-lg">Show / Hide</button>
                     </div>
                     <div class="row">
                         <div class="col status" data-board-id="1" data-status-id="1">New</div>
@@ -86,7 +86,7 @@
         </div>
 
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#staticBackdrop">
+        <button type="button" class="btn btn-secondary btn-lg" data-toggle="modal" data-target="#staticBackdrop">
           Launch static backdrop modal
         </button>
 
@@ -94,18 +94,18 @@
         <div class="modal fade bd-example-modal-lg" id="staticBackdrop" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <div class="modal-header bg-secondary">
+                <h3 class="modal-title" id="staticBackdropLabel">Modal title</h3>
+                <button type="button" class="btn btn-secondary btn-lg" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <div class="modal-body">
+              <div class="modal-body bg-dark">
                 ...
               </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Understood</button>
+              <div class="modal-footer bg-dark">
+                <button type="button" class="btn btn-secondary btn-lg" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary btn-lg">Understood</button>
               </div>
             </div>
           </div>

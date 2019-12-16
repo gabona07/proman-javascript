@@ -1,7 +1,7 @@
 body {
-    background: #16222A;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to bottom, #00352F, #0D4F48 );  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to bottom, #00352F, #0D4F48); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: #16222A;
+    background: -webkit-linear-gradient(to bottom, #00352F, #0D4F48 );
+    background: linear-gradient(to bottom, #00352F, #0D4F48);
     color: #f7f7f7;
     font-family: 'Indie Flower', cursive;
     font-size: 1.8rem;
@@ -26,9 +26,29 @@ body {
     background: #0D4F48;
     color: #f7f7f7;
     transition: 1s;
+    text-align: center;
 }
 
 .card:hover #card-actions {
-    transition: 1s;
+    transition: 0.7s ease-out;
     right: 0;
+}
+
+#header {
+    margin: 1rem;
+    padding: 1rem;
+    border: 2px solid #f7f7f7;
+}
+#board-container {
+    padding: 1rem;
+    border: 2px solid #f7f7f7;
+}
+
+#board-title {
+    margin: 0.5rem;
+}
+
+#new-card-button, #show-hide-button {
+    background-color: silver;
+    border: 0.5rem solid silver;
 }
