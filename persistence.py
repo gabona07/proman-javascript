@@ -1,36 +1,31 @@
-import csv
-
-STATUSES_FILE = './data/statuses.csv'
-BOARDS_FILE = './data/boards.csv'
-CARDS_FILE = './data/cards.csv'
+import connection
+from psycopg2 import sql
 
 _cache = {}  # We store cached data in this dict to avoid multiple file readings
 
 
-def _read_csv(file_name):
+@connection.connection_handler
+def _read_table(cursor, table_name):
     """
     Reads content of a .csv file
-    :param file_name: relative path to data file
+    :param table_name: table's name in the database
     :return: OrderedDict
     """
-    with open(file_name) as boards:
-        rows = csv.DictReader(boards, delimiter=',', quotechar='"')
-        formatted_data = []
-        for row in rows:
-            formatted_data.append(dict(row))
-        return formatted_data
+    cursor.execute(sql.SQL("SELECT * FROM {}").format(sql.Identifier(table_name)))
+    table_data = cursor.fetchall()
+    return table_data
 
 
-def _get_data(data_type, file, force):
+def _get_data(data_type, table_name, force):
     """
     Reads defined type of data from file or cache
     :param data_type: key where the data is stored in cache
-    :param file: relative path to data file
+    :param table_name: table's name in the database
     :param force: if set to True, cache will be ignored
     :return: OrderedDict
     """
     if force or data_type not in _cache:
-        _cache[data_type] = _read_csv(file)
+        _cache[data_type] = _read_table(table_name)
     return _cache[data_type]
 
 
@@ -40,12 +35,12 @@ def clear_cache():
 
 
 def get_statuses(force=False):
-    return _get_data('statuses', STATUSES_FILE, force)
+    return _get_data('statuses', 'statuses', force)
 
 
 def get_boards(force=False):
-    return _get_data('boards', BOARDS_FILE, force)
+    return _get_data('boards', 'boards', force)
 
 
 def get_cards(force=False):
-    return _get_data('cards', CARDS_FILE, force)
+    return _get_data('cards', 'cards', force)
