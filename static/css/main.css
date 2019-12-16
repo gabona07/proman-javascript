@@ -14,6 +14,7 @@ body {
     background-color: #f7f7f7;
     color: #000000;
     margin-bottom: 10px;
+    border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
     box-shadow: 1px 1px 5px #000000;
 }
 
@@ -46,9 +47,4 @@ body {
 
 #board-title {
     margin: 0.5rem;
-}
-
-#new-card-button, #show-hide-button {
-    background-color: silver;
-    border: 0.5rem solid silver;
 }
