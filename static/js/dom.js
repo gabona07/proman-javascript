@@ -3,6 +3,7 @@ import { dataHandler } from "./data_handler.js";
 
 export let dom = {
     init: function () {
+        document.querySelector('.close').addEventListener('click', this.closeModal)
         // This function should run once, when the page is loaded.
     },
     loadBoards: function () {
@@ -39,5 +40,9 @@ export let dom = {
         // shows the cards of a board
         // it adds necessary event listeners also
     },
+    closeModal: function(){
+
+            document.querySelector('.modal').style.display = 'none';
+    }
     // here comes more features
 };
