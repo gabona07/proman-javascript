@@ -96,6 +96,7 @@ export let dom = {
         const addButton = document.createElement('a');
         addButton.setAttribute('type', 'submit');
         addButton.setAttribute('id','addButton');
+        addButton.setAttribute('data-dismiss','modal');
         addButton.classList.add('btn', 'btn-primary');
         addButton.textContent = 'Submit';
         form.appendChild(addButton);
