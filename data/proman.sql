@@ -34,7 +34,6 @@ CREATE TABLE statuses (
 
 CREATE TABLE users (
     id serial PRIMARY KEY,
-    title text,
     username text,
     password text
 );
