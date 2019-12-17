@@ -4,6 +4,7 @@ import { dataHandler } from "./data_handler.js";
 export let dom = {
     init: function () {
         document.querySelector('#register').addEventListener('click', this.registerModal)
+        document.querySelector('#newBoard').addEventListener('click', this.createBoardModal)
         // This function should run once, when the page is loaded.
     },
     loadBoards: function () {
@@ -23,14 +24,37 @@ export let dom = {
 
         for(let board of boards){
             boardList += `
-                <li>${board.title}</li>
+                <div class="board mb-3" id="board-container">
+                <div class="row" id="board-header">
+                    <h3 class="text-left" id="board-title">${board.title}</h3>
+                    <button class="btn btn-secondary text-left btn-lg">+ New Card</button>
+                    <button class="btn btn-secondary ml-auto btn-lg">Show / Hide</button>
+                </div>
+                <div class="row">
+                    <div class="col status" data-board-id="1" data-status-id="1">New</div>
+                    <div class="col status" data-board-id="1" data-status-id="2">In progress</div>
+                    <div class="col status" data-board-id="1" data-status-id="3">Testing</div>
+                    <div class="col status" data-board-id="1" data-status-id="4">Done</div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="card">Task 1<div id="card-actions">Delete</div></div>
+                        <div class="card">Task 3<div id="card-actions">Delete</div></div>
+                        <div class="card">Task 5<div id="card-actions">Delete</div></div>
+                    </div>
+                    <div class="col">
+                        <div class="card">Task 2<div id="card-actions">Delete</div></div>
+                        <div class="card">Task 4<div id="card-actions">Delete</div></div>
+                    </div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                </div>
+                </div>
             `;
         }
 
         const outerHtml = `
-            <ul class="board-container">
-                ${boardList}
-            </ul>
+            ${boardList}
         `;
 
         let boardsContainer = document.querySelector('#boards');
@@ -55,6 +79,27 @@ export let dom = {
         const outerHtml = `${cardList}`;
         let cardsContainer = document.querySelector('#cards');
         cardsContainer.insertAdjacentHTML("beforeend", outerHtml);
+    },
+    createBoardModal: function() {
+        const modalBody = document.querySelector('.modal-body');
+        modalBody.innerHTML = '';
+        document.querySelector('#modalTitle').textContent = 'Create new board';
+        const form = document.createElement('form');
+        form.setAttribute('method', 'POST');
+        form.setAttribute('action',"/create-new-board");
+        const boardName = document.createElement('input');
+        boardName.setAttribute('type', 'text');
+        boardName.setAttribute('placeholder', 'Board Name');
+        boardName.setAttribute('name', 'boardname');
+        boardName.setAttribute('autocomplete', 'off');
+        boardName.setAttribute('required', 'required');
+        form.appendChild(boardName);
+        const submitButton = document.createElement('button');
+        submitButton.setAttribute('type', 'submit');
+        submitButton.classList.add('btn', 'btn-primary');
+        submitButton.textContent = ' Submit';
+        form.appendChild(submitButton);
+        modalBody.appendChild(form);
     },
     registerModal: function(){
             const modalBody = document.querySelector('.modal-body');

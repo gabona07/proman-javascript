@@ -19,6 +19,13 @@ def get_boards():
     return persistence.get_boards(force=True)
 
 
+def create_new_board(title):
+    """
+    Create new board
+    :return: OK/NOT OK TODO
+    """
+    return persistence.create_new_board(title)
+
 def get_cards_for_board(board_id):
     persistence.clear_cache()
     all_cards = persistence.get_cards()
