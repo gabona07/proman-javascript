@@ -10,6 +10,9 @@ export let dom = {
         // retrieves boards and makes showBoards called
         dataHandler.getBoards(function(boards){
             dom.showBoards(boards);
+            for (let board of boards) { //TODO need to insert cards into the specific board
+                dom.loadCards(board.id);//TODO loadCards function needs a proper board id
+            }
         });
     },
     showBoards: function (boards) {
@@ -35,10 +38,23 @@ export let dom = {
     },
     loadCards: function (boardId) {
         // retrieves cards and makes showCards called
+        dataHandler.getCardsByBoardId(boardId, function (cards) {
+            dom.showCards(cards);
+        });
     },
-    showCards: function (cards) {
+    showCards: function (cards) { //TODO need columns for different statuses
         // shows the cards of a board
         // it adds necessary event listeners also
+        let cardList = '';
+
+        for(let card of cards){
+            cardList += `
+                <div class="card">${card.title}<div id="card-actions">Delete</div></div>       
+            `;
+        }
+        const outerHtml = `${cardList}`;
+        let cardsContainer = document.querySelector('#cards');
+        cardsContainer.insertAdjacentHTML("beforeend", outerHtml);
     },
     registerModal: function(){
             const modalBody = document.querySelector('.modal-body');
