@@ -33,14 +33,15 @@ def get_cards_for_board(board_id: int):
     return data_handler.get_cards_for_board(board_id)
 
 
-@app.route('/register', methods=['GET', 'POST'])
+@app.route('/register', methods=['POST'])
 def register():
     if request.method == 'POST':
-        print(request.form)
-        password = hash_password(request.form['password'])
-        print(password)
-        return redirect('/')
-
+        data = request.json
+        print(data['username'])
+        # return data
+        data['password'] = hash_password(data['password'])
+        return data_handler.register_user(data)
+        # return data
 
 
 def main():

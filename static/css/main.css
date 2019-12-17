@@ -55,6 +55,8 @@ body {
 #board-header {
     border-bottom: 0.2rem solid #f7f7f7;
     padding: 0.5rem;
+}
+
 input {
     width: 50%;
     display: block;
@@ -65,4 +67,8 @@ input {
 .modal-body {
     text-align: center;
     padding: 50px;
+}
+
+.close span {
+    font-size: 74px;
 }
