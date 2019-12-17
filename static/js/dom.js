@@ -41,7 +41,6 @@ export let dom = {
         // it adds necessary event listeners also
     },
     closeModal: function(){
-
             document.querySelector('.modal').style.display = 'none';
     }
     // here comes more features
