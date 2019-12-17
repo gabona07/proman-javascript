@@ -30,7 +30,7 @@ def create_new_board():
     Create new board
     """
     if request.method == 'POST':
-        title = request.form['boardname']
+        title = request.json
         return data_handler.create_new_board(title)
 
 @app.route("/get-cards/<int:board_id>")

@@ -85,8 +85,7 @@ export let dom = {
         modalBody.innerHTML = '';
         document.querySelector('#modalTitle').textContent = 'Create new board';
         const form = document.createElement('form');
-        form.setAttribute('method', 'POST');
-        form.setAttribute('action',"/create-new-board");
+        form.setAttribute('id','createBoardForm')
         const boardName = document.createElement('input');
         boardName.setAttribute('type', 'text');
         boardName.setAttribute('placeholder', 'Board Name');
@@ -94,12 +93,21 @@ export let dom = {
         boardName.setAttribute('autocomplete', 'off');
         boardName.setAttribute('required', 'required');
         form.appendChild(boardName);
-        const submitButton = document.createElement('button');
-        submitButton.setAttribute('type', 'submit');
-        submitButton.classList.add('btn', 'btn-primary');
-        submitButton.textContent = ' Submit';
-        form.appendChild(submitButton);
+        const addButton = document.createElement('a');
+        addButton.setAttribute('type', 'submit');
+        addButton.setAttribute('id','addButton');
+        addButton.classList.add('btn', 'btn-primary');
+        addButton.textContent = 'Submit';
+        form.appendChild(addButton);
         modalBody.appendChild(form);
+
+        document.querySelector('#addButton').addEventListener('click',
+            function() {
+                        let boardForm = document.getElementById('createBoardForm');
+                        var formData = new FormData(boardForm);
+                        dataHandler.createNewBoard(formData, dom.loadBoards());
+                    }
+        )
     },
     registerModal: function(){
             const modalBody = document.querySelector('.modal-body');

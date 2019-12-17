@@ -17,6 +17,16 @@ export let dataHandler = {
         .then(json_response => callback(json_response));  // Call the `callback` with the returned object
     },
     _api_post: function (url, data, callback) {
+        fetch(url, {
+            method: 'POST',
+            credentials: 'same-origin',
+            body: JSON.stringify(Object.fromEntries(data)),
+            headers: {
+              'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())  // parse the response as JSON
+        .then(json_response => callback(json_response));  // Call the `callback` with the returned object
         // it is not called from outside
         // sends the data to the API, and calls callback function
     },
@@ -53,6 +63,7 @@ export let dataHandler = {
     },
     createNewBoard: function (boardTitle, callback) {
         // creates new board, saves it and calls the callback function with its data
+        this._api_post('/create-new-board', boardTitle, callback)
     },
     createNewCard: function (cardTitle, boardId, statusId, callback) {
         // creates new card, saves it and calls the callback function with its data

@@ -24,7 +24,9 @@ def create_new_board(title):
     Create new board
     :return: OK/NOT OK TODO
     """
-    return persistence.create_new_board(title)
+    title_name = title['boardname']
+    return persistence.create_new_board(title_name)
+
 
 def get_cards_for_board(board_id):
     persistence.clear_cache()
