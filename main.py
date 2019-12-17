@@ -1,5 +1,5 @@
-from flask import Flask, render_template, url_for
-from util import json_response
+from flask import Flask, render_template, url_for, request, redirect
+from util import json_response, hash_password
 
 import data_handler
 
@@ -31,6 +31,16 @@ def get_cards_for_board(board_id: int):
     :param board_id: id of the parent board
     """
     return data_handler.get_cards_for_board(board_id)
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        print(request.form)
+        password = hash_password(request.form['password'])
+        print(password)
+        return redirect('/')
+
 
 
 def main():
