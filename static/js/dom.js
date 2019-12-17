@@ -3,7 +3,7 @@ import { dataHandler } from "./data_handler.js";
 
 export let dom = {
     init: function () {
-        document.querySelector('.close').addEventListener('click', this.closeModal)
+        document.querySelector('#register').addEventListener('click', this.registerModal)
         // This function should run once, when the page is loaded.
     },
     loadBoards: function () {
@@ -40,8 +40,34 @@ export let dom = {
         // shows the cards of a board
         // it adds necessary event listeners also
     },
-    closeModal: function(){
-            document.querySelector('.modal').style.display = 'none';
+    registerModal: function(){
+            const modalBody = document.querySelector('.modal-body');
+            modalBody.innerHTML = '';
+            document.querySelector('#modalTitle').textContent = 'Registration';
+            const form = document.createElement('form');
+            form.setAttribute('method', 'POST');
+            form.setAttribute('action',"/register");
+            const input = document.createElement('input');
+            input.setAttribute('type', 'text');
+            input.setAttribute('placeholder', 'Username');
+            input.setAttribute('name', 'username');
+            input.setAttribute('autocomplete', 'off');
+            input.setAttribute('required', 'required');
+            // input.classList.add('form-control')
+            const passwInput = document.createElement('input');
+            passwInput.setAttribute('type', 'password');
+            passwInput.setAttribute('placeholder', 'Password');
+            passwInput.setAttribute('name', 'password');
+            passwInput.setAttribute('required', 'required');
+            // passwInput.classList.add('form-control')
+            form.appendChild(input);
+            form.appendChild(passwInput);
+            const submitButton = document.createElement('button');
+            submitButton.setAttribute('type', 'submit');
+            submitButton.classList.add('btn', 'btn-primary');
+            submitButton.textContent = ' Submit';
+            form.appendChild(submitButton);
+            modalBody.appendChild(form);
     }
     // here comes more features
 };
