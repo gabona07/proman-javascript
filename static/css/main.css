@@ -2,3 +2,14 @@
     background-color: green;
 }
 
+input {
+    width: 50%;
+    display: block;
+    margin: 15px auto;
+
+}
+
+.modal-body {
+    text-align: center;
+    padding: 50px;
+}
