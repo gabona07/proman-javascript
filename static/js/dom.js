@@ -64,7 +64,7 @@ export let dom = {
             form.appendChild(passwInput);
             const submitButton = document.createElement('button');
             submitButton.setAttribute('type', 'submit');
-            submitButton.classList.add('btn', 'btn-primary');
+            submitButton.classList.add('btn', 'btn-secondary');
             submitButton.textContent = ' Submit';
             form.appendChild(submitButton);
             modalBody.appendChild(form);
