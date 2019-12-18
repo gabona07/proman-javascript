@@ -44,17 +44,10 @@ export let dom = {
                     <div class="col status" data-board-id="1" data-status-id="4">Done</div>
                 </div>
                 <div class="row">
-                    <div class="col">
-                        <div class="card">Task 1<div id="card-actions">Delete</div></div>
-                        <div class="card">Task 3<div id="card-actions">Delete</div></div>
-                        <div class="card">Task 5<div id="card-actions">Delete</div></div>
-                    </div>
-                    <div class="col">
-                        <div class="card">Task 2<div id="card-actions">Delete</div></div>
-                        <div class="card">Task 4<div id="card-actions">Delete</div></div>
-                    </div>
-                    <div class="col"></div>
-                    <div class="col"></div>
+                    <div class="col" id="new"></div>
+                    <div class="col" id="in-progress"></div>
+                    <div class="col" id="testing"></div>
+                    <div class="col" id="done"></div>
                 </div>
                 </div>
             `;
@@ -86,16 +79,14 @@ export let dom = {
     showCards: function (cards) { //TODO need columns for different statuses
         // shows the cards of a board
         // it adds necessary event listeners also
-        let cardList = '';
-
         for(let card of cards){
-            cardList += `
-                <div class="card">${card.title}<div id="card-actions">Delete</div></div>       
-            `;
+            let boardId = card.board_id;
+            const cardContainer = document.createElement('div');
+            cardContainer.setAttribute('class', 'card');
+            cardContainer.textContent = `${card.title}`;
+            let boardContainer = document.querySelector(`#board-container-${boardId}`);
+            boardContainer.appendChild(cardContainer)
         }
-        const outerHtml = `${cardList}`;
-        let cardsContainer = document.querySelector('#cards');
-        cardsContainer.insertAdjacentHTML("beforeend", outerHtml);
     },
     createBoardModal: function() {
         const modalBody = document.querySelector('.modal-body');
