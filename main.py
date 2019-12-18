@@ -37,11 +37,8 @@ def get_cards_for_board(board_id: int):
 def register():
     if request.method == 'POST':
         data = request.json
-        print(data['username'])
-        # return data
         data['password'] = hash_password(data['password'])
         return data_handler.register_user(data)
-        # return data
 
 
 def main():

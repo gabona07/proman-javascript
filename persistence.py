@@ -57,3 +57,15 @@ def insert_user(cursor, data):
                        'pw': data['password']
                    })
     return cursor.fetchone()
+
+
+@connection.connection_handler
+def get_user_id(cursor, username):
+    cursor.execute("""
+                    SELECT * FROM users
+                    WHERE username = %(uname)s
+                    """,
+                   {
+                       'uname': username
+                   })
+    return cursor.fetchone()

@@ -70,5 +70,6 @@ input {
 }
 
 .close span {
+    color: rgba(238,228,218,0.72);
     font-size: 74px;
 }

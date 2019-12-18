@@ -62,7 +62,7 @@ export let dom = {
             const submitButton = document.createElement('button');
             submitButton.setAttribute('type', 'button');
             submitButton.setAttribute('id', 'registerButton');
-            submitButton.classList.add('btn', 'btn-primary');
+            submitButton.classList.add('btn', 'btn-secondary');
             submitButton.textContent = ' Submit';
             form.appendChild(submitButton);
             submitButton.addEventListener('click', function(){

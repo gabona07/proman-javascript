@@ -66,7 +66,12 @@ export let dataHandler = {
     registerUser(form){
 
         this._api_post('/register', form, function(serverResponse){
-            console.log(serverResponse);
+            if(serverResponse.userid){
+                console.log(serverResponse);
+            } else {
+                alert('This username has been taken');
+            }
+
         });
     }
     // here comes more features
