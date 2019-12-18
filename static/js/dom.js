@@ -17,8 +17,8 @@ export let dom = {
         // retrieves boards and makes showBoards called
         dataHandler.getBoards(function(boards){
             dom.showBoards(boards);
-            for (let board of boards) { //TODO need to insert cards into the specific board
-                dom.loadCards(board.id);//TODO loadCards function needs a proper board id
+            for (let board of boards) {
+                dom.loadCards(board.id);
             }
         });
     },
@@ -80,10 +80,13 @@ export let dom = {
         // shows the cards of a board
         // it adds necessary event listeners also
         for(let card of cards){
-            let boardId = card.board_id;
+            // Create card container div element
             const cardContainer = document.createElement('div');
             cardContainer.setAttribute('class', 'card');
             cardContainer.textContent = `${card.title}`;
+
+            // Get the corresponding boards for each card
+            let boardId = card.board_id;
             let boardContainer = document.querySelector(`#board-container-${boardId}`);
             boardContainer.appendChild(cardContainer)
         }
