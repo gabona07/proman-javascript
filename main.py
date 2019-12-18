@@ -33,6 +33,7 @@ def create_new_board():
         title = request.json
         return data_handler.create_new_board(title)
 
+
 @app.route("/get-cards/<int:board_id>")
 @json_response
 def get_cards_for_board(board_id: int):
