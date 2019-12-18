@@ -33,6 +33,13 @@ def remove_board(board_id):
     return persistence.remove_board(board_id)
 
 
+def create_new_card(card_attributes):
+    card_title = card_attributes['card-title']
+    board_id = 1
+    status_id = 0
+    return persistence.create_new_card(card_title, board_id, status_id)
+
+
 def get_cards_by_board_id(board_id):
     persistence.clear_cache()
     all_cards = persistence.get_cards()
