@@ -57,16 +57,6 @@ def create_new_card(cursor, title_data, board_id_data, status_id):
     return id_return
 
 
-@connection.connection_handler
-def create_new_card(cursor, title_data, board_id_data, status_id):
-    """
-    Adds new card
-    """
-    cursor.execute(sql.SQL("INSERT INTO {} (title, board_id, status_id) VALUES (%s, %s, %s) RETURNING id, title").format(sql.Identifier('cards')), [title_data, board_id_data, status_id])
-    id_return = cursor.fetchone()
-    return id_return
-
-
 def clear_cache():
     for k in list(_cache.keys()):
         _cache.pop(k)
