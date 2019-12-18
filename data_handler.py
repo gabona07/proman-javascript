@@ -22,10 +22,15 @@ def get_boards():
 def create_new_board(title):
     """
     Create new board
-    :return: OK/NOT OK TODO
     """
     title_name = title['boardname']
     return persistence.create_new_board(title_name)
+
+def remove_board(board_id):
+    """
+    Remove board
+    """
+    return persistence.remove_board(board_id)
 
 
 def get_cards_for_board(board_id):

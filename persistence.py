@@ -35,8 +35,16 @@ def create_new_board(cursor, title_data):
     Adds new table
     """
     cursor.execute(sql.SQL("INSERT INTO {} (title) VALUES (%s) RETURNING id, title, user_id").format(sql.Identifier('boards')), [title_data])
-    id_return = cursor.fetchone()
-    return id_return
+    data_return = cursor.fetchone()
+    return data_return
+
+
+@connection.connection_handler
+def remove_board(cursor, id_data):
+    cursor.execute(sql.SQL("DELETE FROM {} WHERE id = (%s)").format(sql.Identifier('boards')), [id_data])
+    cursor.execute(sql.SQL("DELETE FROM {} WHERE board_id = (%s)").format(sql.Identifier('cards')), [id_data])
+    status = "{'status': 'dummy'}"
+    return status
 
 
 def clear_cache():
