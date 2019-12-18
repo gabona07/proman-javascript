@@ -5,12 +5,16 @@ export let dom = {
     init: function () {
         document.querySelector('#register').addEventListener('click', this.registerModal);
         document.querySelector('#login').addEventListener('click', this.loginModal);
+        document.querySelector('#newBoard').addEventListener('click', this.createBoardModal)
         // This function should run once, when the page is loaded.
     },
     loadBoards: function () {
         // retrieves boards and makes showBoards called
         dataHandler.getBoards(function(boards){
             dom.showBoards(boards);
+            for (let board of boards) { //TODO need to insert cards into the specific board
+                dom.loadCards(board.id);//TODO loadCards function needs a proper board id
+            }
         });
     },
     showBoards: function (boards) {
@@ -21,14 +25,37 @@ export let dom = {
 
         for(let board of boards){
             boardList += `
-                <li>${board.title}</li>
+                <div class="board mb-3" id="board-container-${board.id}">
+                <div class="row" id="board-header">
+                    <h3 class="text-left" id="board-title">${board.title}</h3>
+                    <button class="btn btn-secondary text-left btn-lg">+ New Card</button>
+                    <button class="btn btn-secondary ml-auto btn-lg">Show / Hide</button>
+                </div>
+                <div class="row">
+                    <div class="col status" data-board-id="1" data-status-id="1">New</div>
+                    <div class="col status" data-board-id="1" data-status-id="2">In progress</div>
+                    <div class="col status" data-board-id="1" data-status-id="3">Testing</div>
+                    <div class="col status" data-board-id="1" data-status-id="4">Done</div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="card">Task 1<div id="card-actions">Delete</div></div>
+                        <div class="card">Task 3<div id="card-actions">Delete</div></div>
+                        <div class="card">Task 5<div id="card-actions">Delete</div></div>
+                    </div>
+                    <div class="col">
+                        <div class="card">Task 2<div id="card-actions">Delete</div></div>
+                        <div class="card">Task 4<div id="card-actions">Delete</div></div>
+                    </div>
+                    <div class="col"></div>
+                    <div class="col"></div>
+                </div>
+                </div>
             `;
         }
 
         const outerHtml = `
-            <ul class="board-container">
-                ${boardList}
-            </ul>
+            ${boardList}
         `;
 
         let boardsContainer = document.querySelector('#boards');
@@ -36,10 +63,55 @@ export let dom = {
     },
     loadCards: function (boardId) {
         // retrieves cards and makes showCards called
+        dataHandler.getCardsByBoardId(boardId, function (cards) {
+            dom.showCards(cards);
+        });
     },
-    showCards: function (cards) {
+    showCards: function (cards) { //TODO need columns for different statuses
         // shows the cards of a board
         // it adds necessary event listeners also
+        let cardList = '';
+
+        for(let card of cards){
+            cardList += `
+                <div class="card">${card.title}<div id="card-actions">Delete</div></div>       
+            `;
+        }
+        const outerHtml = `${cardList}`;
+        let cardsContainer = document.querySelector('#cards');
+        cardsContainer.insertAdjacentHTML("beforeend", outerHtml);
+    },
+    createBoardModal: function() {
+        const modalBody = document.querySelector('.modal-body');
+        modalBody.innerHTML = '';
+        document.querySelector('#modalTitle').textContent = 'Create new board';
+        const form = document.createElement('form');
+        form.setAttribute('id','createBoardForm')
+        const boardName = document.createElement('input');
+        boardName.setAttribute('type', 'text');
+        boardName.setAttribute('placeholder', 'Board Name');
+        boardName.setAttribute('name', 'boardname');
+        boardName.setAttribute('autocomplete', 'off');
+        boardName.setAttribute('required', 'required');
+        form.appendChild(boardName);
+        const addButton = document.createElement('a');
+        addButton.setAttribute('type', 'submit');
+        addButton.setAttribute('id','addButton');
+        addButton.setAttribute('data-dismiss','modal');
+        addButton.classList.add('btn', 'btn-primary');
+        addButton.textContent = 'Submit';
+        form.appendChild(addButton);
+        modalBody.appendChild(form);
+
+        document.querySelector('#addButton').addEventListener('click',
+            function() {
+                        let boardForm = document.getElementById('createBoardForm');
+                        var formData = new FormData(boardForm);
+                        dataHandler.createNewBoard(formData, function(addedBoard) {
+                            dom.showBoards(addedBoard);
+                        });
+                    }
+        )
     },
     registerModal: function(){
             const modalBody = document.querySelector('.modal-body');

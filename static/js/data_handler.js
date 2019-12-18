@@ -53,12 +53,21 @@ export let dataHandler = {
     },
     getCardsByBoardId: function (boardId, callback) {
         // the cards are retrieved and then the callback function is called with the cards
+        this._api_get('/get-cards/' + `${boardId}`, (response) => {
+            this._data = response;
+            callback(response);
+        });
     },
     getCard: function (cardId, callback) {
         // the card is retrieved and then the callback function is called with the card
     },
     createNewBoard: function (boardTitle, callback) {
         // creates new board, saves it and calls the callback function with its data
+        this._api_post('/create-new-board', boardTitle, (response) => {
+            this._data = response;
+            response = [response];
+            callback(response);
+        })
     },
     createNewCard: function (cardTitle, boardId, statusId, callback) {
         // creates new card, saves it and calls the callback function with its data
