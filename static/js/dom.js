@@ -24,7 +24,7 @@ export let dom = {
 
         for(let board of boards){
             boardList += `
-                <div class="board mb-3" id="board-container">
+                <div class="board mb-3" id="board-container-${board.id}">
                 <div class="row" id="board-header">
                     <h3 class="text-left" id="board-title">${board.title}</h3>
                     <button class="btn btn-secondary text-left btn-lg">+ New Card</button>
