@@ -106,7 +106,9 @@ export let dom = {
             function() {
                         let boardForm = document.getElementById('createBoardForm');
                         var formData = new FormData(boardForm);
-                        dataHandler.createNewBoard(formData, dom.loadBoards());
+                        dataHandler.createNewBoard(formData, function(addedBoard) {
+                            dom.showBoards(addedBoard);
+                        });
                     }
         )
     },

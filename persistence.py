@@ -34,7 +34,7 @@ def create_new_board(cursor, title_data):
     """
     Adds new table
     """
-    cursor.execute(sql.SQL("INSERT INTO {} (title) VALUES (%s) RETURNING id").format(sql.Identifier('boards')), [title_data])
+    cursor.execute(sql.SQL("INSERT INTO {} (title) VALUES (%s) RETURNING id, title, user_id").format(sql.Identifier('boards')), [title_data])
     id_return = cursor.fetchone()
     return id_return
 
