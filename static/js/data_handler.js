@@ -87,7 +87,7 @@ export let dataHandler = {
         this._api_post('/login', form, function(serverResponse){
             if(serverResponse.username){
                 console.log(serverResponse);
-                document.querySelector('#staticBackdrop').remove();
+                // document.querySelector('#staticBackdrop').remove();
                 document.querySelector('#username').textContent = 'Logged in as ' + serverResponse.username;
             } else {
                 alert('Wrong username or password');
