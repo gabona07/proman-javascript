@@ -96,7 +96,7 @@ export let dom = {
         boardName.setAttribute('required', 'required');
         form.appendChild(boardName);
         const addButton = document.createElement('a');
-        addButton.setAttribute('type', 'submit');
+        addButton.setAttribute('type', 'button');
         addButton.setAttribute('id','addButton');
         addButton.setAttribute('data-dismiss','modal');
         addButton.classList.add('btn', 'btn-primary');
@@ -138,6 +138,8 @@ export let dom = {
             submitButton.setAttribute('id', 'registerButton');
             submitButton.classList.add('btn', 'btn-secondary');
             submitButton.textContent = ' Submit';
+            submitButton.setAttribute('data-dismiss', 'modal');
+
             form.appendChild(submitButton);
             submitButton.addEventListener('click', function(){
                 dataHandler.registerUser(new FormData(form))
@@ -166,6 +168,7 @@ export let dom = {
             const submitButton = document.createElement('button');
             submitButton.setAttribute('type', 'button');
             submitButton.setAttribute('id', 'registerButton');
+            submitButton.setAttribute('data-dismiss', 'modal');
             submitButton.classList.add('btn', 'btn-secondary');
             submitButton.textContent = ' Submit';
             form.appendChild(submitButton);
