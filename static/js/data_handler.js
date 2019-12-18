@@ -80,7 +80,6 @@ export let dataHandler = {
         this._api_post('/create-new-card', cardTitle, boardId, statusId, (response) => {
             this._data = response;
             response = [response];
-            callback(response);
         })
     },
     registerUser(form){
