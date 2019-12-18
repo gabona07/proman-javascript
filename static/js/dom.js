@@ -5,6 +5,7 @@ export let dom = {
     init: function () {
         document.querySelector('#register').addEventListener('click', this.registerModal);
         document.querySelector('#login').addEventListener('click', this.loginModal);
+        document.querySelector('#logout').addEventListener('click', this.logout);
         document.querySelector('#newBoard').addEventListener('click', this.createBoardModal)
         // This function should run once, when the page is loaded.
     },
@@ -172,6 +173,9 @@ export let dom = {
                 dataHandler.loginUser(new FormData(form))
             });
             modalBody.appendChild(form)
+
+    },
+    logout: function(){
 
     }
     // here comes more features

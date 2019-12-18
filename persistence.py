@@ -79,3 +79,11 @@ def get_user_id(cursor, username):
                        'uname': username
                    })
     return cursor.fetchone()
+
+
+@connection.connection_handler
+def get_user_data(cursor):
+    cursor.execute("""
+                    SELECT id, username, password FROM users
+                    """)
+    return cursor.fetchall()

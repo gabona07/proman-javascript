@@ -85,10 +85,12 @@ export let dataHandler = {
     },
     loginUser(form){
         this._api_post('/login', form, function(serverResponse){
-            if(serverResponse.userid){
+            if(serverResponse.username){
                 console.log(serverResponse);
+                // document.querySelector('#staticBackdrop').style.display = 'none';
+                document.querySelector('#username').textContent = 'Logged in as ' + serverResponse.username;
             } else {
-                alert('This username has been taken');
+                alert('Wrong username or password');
             }
 
         });
