@@ -4,7 +4,7 @@ from util import json_response, hash_password
 import data_handler
 
 app = Flask(__name__)
-
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 1
 
 @app.route("/")
 def index():
@@ -22,6 +22,16 @@ def get_boards():
     """
     return data_handler.get_boards()
 
+
+@app.route("/create-new-board", methods=['POST'])
+@json_response
+def create_new_board():
+    """
+    Create new board
+    """
+    if request.method == 'POST':
+        title = request.json
+        return data_handler.create_new_board(title)
 
 @app.route("/get-cards/<int:board_id>")
 @json_response

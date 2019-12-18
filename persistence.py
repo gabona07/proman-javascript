@@ -7,7 +7,7 @@ _cache = {}  # We store cached data in this dict to avoid multiple file readings
 @connection.connection_handler
 def _read_table(cursor, table_name):
     """
-    Reads content of a .csv file
+    Reads content of a table
     :param table_name: table's name in the database
     :return: OrderedDict
     """
@@ -27,6 +27,16 @@ def _get_data(data_type, table_name, force):
     if force or data_type not in _cache:
         _cache[data_type] = _read_table(table_name)
     return _cache[data_type]
+
+
+@connection.connection_handler
+def create_new_board(cursor, title_data):
+    """
+    Adds new table
+    """
+    cursor.execute(sql.SQL("INSERT INTO {} (title) VALUES (%s) RETURNING id, title, user_id").format(sql.Identifier('boards')), [title_data])
+    id_return = cursor.fetchone()
+    return id_return
 
 
 def clear_cache():
