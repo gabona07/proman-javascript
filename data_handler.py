@@ -28,12 +28,21 @@ def create_new_board(title):
     return persistence.create_new_board(title_name)
 
 
-def get_cards_for_board(board_id):
+def get_cards_by_board_id(board_id):
     persistence.clear_cache()
     all_cards = persistence.get_cards()
     matching_cards = []
     for card in all_cards:
         if str(card['board_id']) == str(board_id):
-            # card['status_id'] = get_card_status(card['status_id'])  # Set textual status for the card
+            card['status_id'] = get_card_status(card['status_id'])  # Set textual status for the card
             matching_cards.append(card)
     return matching_cards
+
+
+def get_cards_for_board():
+    cards_for_board = []
+    boards = get_boards()
+    for board in boards:
+        board_id = board['id']
+        cards_for_board.append(get_cards_by_board_id(board_id))
+    return cards_for_board
