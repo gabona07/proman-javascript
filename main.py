@@ -41,6 +41,14 @@ def register():
         return data_handler.register_user(data)
 
 
+@app.route('/login', methods=['POST'])
+def login():
+    if request.method == 'POST':
+        data = request.json
+        print(data)
+    pass
+
+
 def main():
     app.run(debug=True)
 

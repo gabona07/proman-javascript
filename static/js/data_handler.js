@@ -73,6 +73,17 @@ export let dataHandler = {
             }
 
         });
+    },
+    loginUser(form){
+        this._api_post('/login', form, function(serverResponse){
+            if(serverResponse.userid){
+                console.log(serverResponse);
+            } else {
+                alert('This username has been taken');
+            }
+
+        });
+
     }
     // here comes more features
 };
