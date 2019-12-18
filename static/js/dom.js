@@ -138,7 +138,6 @@ export let dom = {
             submitButton.setAttribute('id', 'registerButton');
             submitButton.classList.add('btn', 'btn-secondary');
             submitButton.textContent = ' Submit';
-            submitButton.setAttribute('data-dismiss', 'modal');
 
             form.appendChild(submitButton);
             submitButton.addEventListener('click', function(){
@@ -168,7 +167,6 @@ export let dom = {
             const submitButton = document.createElement('button');
             submitButton.setAttribute('type', 'button');
             submitButton.setAttribute('id', 'registerButton');
-            submitButton.setAttribute('data-dismiss', 'modal');
             submitButton.classList.add('btn', 'btn-secondary');
             submitButton.textContent = ' Submit';
             form.appendChild(submitButton);

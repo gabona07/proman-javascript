@@ -65,15 +65,6 @@ def login():
                 session['user_id'] = row['id']
                 return {'id': session['user_id'], 'username': data['username']}
         return {'username': None}
-        # print(db_data[0]['password'])
-
-        # print(data['username'])
-        # hash_pass = data_handler.get_password(data['username'])
-        # if verify_password(data['password'], hash_pass):
-        #     print('Helly')
-        # else:
-        #     print('Noooo')
-    return ''
 
 
 @app.route('/logout')

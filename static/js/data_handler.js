@@ -72,10 +72,11 @@ export let dataHandler = {
     createNewCard: function (cardTitle, boardId, statusId, callback) {
         // creates new card, saves it and calls the callback function with its data
     },
-    registerUser(form){
+    registerUser: function(form){
 
         this._api_post('/register', form, function(serverResponse){
             if(serverResponse.userid){
+                $('.modal').modal('hide');
                 console.log(serverResponse);
             } else {
                 alert('This username has been taken');
@@ -83,11 +84,11 @@ export let dataHandler = {
 
         });
     },
-    loginUser(form){
+    loginUser: function(form){
         this._api_post('/login', form, function(serverResponse){
             if(serverResponse.username){
+                $('.modal').modal('hide');
                 console.log(serverResponse);
-                // document.querySelector('#staticBackdrop').remove();
                 document.querySelector('#username').textContent = 'Logged in as ' + serverResponse.username;
             } else {
                 alert('Wrong username or password');
