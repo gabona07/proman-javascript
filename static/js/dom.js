@@ -3,7 +3,8 @@ import { dataHandler } from "./data_handler.js";
 
 export let dom = {
     init: function () {
-        document.querySelector('#register').addEventListener('click', this.registerModal)
+        document.querySelector('#register').addEventListener('click', this.registerModal);
+        document.querySelector('#login').addEventListener('click', this.loginModal);
         document.querySelector('#newBoard').addEventListener('click', this.createBoardModal)
         // This function should run once, when the page is loaded.
     },
@@ -114,32 +115,64 @@ export let dom = {
     },
     registerModal: function(){
             const modalBody = document.querySelector('.modal-body');
+            const form = document.createElement('form');
+            form.setAttribute('id', 'registerForm');
             modalBody.innerHTML = '';
             document.querySelector('#modalTitle').textContent = 'Registration';
-            const form = document.createElement('form');
-            form.setAttribute('method', 'POST');
-            form.setAttribute('action',"/register");
             const input = document.createElement('input');
             input.setAttribute('type', 'text');
             input.setAttribute('placeholder', 'Username');
             input.setAttribute('name', 'username');
             input.setAttribute('autocomplete', 'off');
             input.setAttribute('required', 'required');
-            // input.classList.add('form-control')
             const passwInput = document.createElement('input');
             passwInput.setAttribute('type', 'password');
             passwInput.setAttribute('placeholder', 'Password');
             passwInput.setAttribute('name', 'password');
             passwInput.setAttribute('required', 'required');
-            // passwInput.classList.add('form-control')
             form.appendChild(input);
             form.appendChild(passwInput);
             const submitButton = document.createElement('button');
-            submitButton.setAttribute('type', 'submit');
+            submitButton.setAttribute('type', 'button');
+            submitButton.setAttribute('id', 'registerButton');
             submitButton.classList.add('btn', 'btn-secondary');
             submitButton.textContent = ' Submit';
             form.appendChild(submitButton);
-            modalBody.appendChild(form);
+            submitButton.addEventListener('click', function(){
+                dataHandler.registerUser(new FormData(form))
+            });
+            modalBody.appendChild(form)
+    },
+    loginModal: function(){
+            const modalBody = document.querySelector('.modal-body');
+            const form = document.createElement('form');
+            form.setAttribute('id', 'registerForm');
+            modalBody.innerHTML = '';
+            document.querySelector('#modalTitle').textContent = 'Login';
+            const input = document.createElement('input');
+            input.setAttribute('type', 'text');
+            input.setAttribute('placeholder', 'Username');
+            input.setAttribute('name', 'username');
+            input.setAttribute('autocomplete', 'off');
+            input.setAttribute('required', 'required');
+            const passwInput = document.createElement('input');
+            passwInput.setAttribute('type', 'password');
+            passwInput.setAttribute('placeholder', 'Password');
+            passwInput.setAttribute('name', 'password');
+            passwInput.setAttribute('required', 'required');
+            form.appendChild(input);
+            form.appendChild(passwInput);
+            const submitButton = document.createElement('button');
+            submitButton.setAttribute('type', 'button');
+            submitButton.setAttribute('id', 'registerButton');
+            submitButton.classList.add('btn', 'btn-secondary');
+            submitButton.textContent = ' Submit';
+            form.appendChild(submitButton);
+            submitButton.addEventListener('click', function(){
+                dataHandler.loginUser(new FormData(form))
+            });
+            modalBody.appendChild(form)
+
     }
     // here comes more features
 };

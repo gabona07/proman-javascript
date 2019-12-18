@@ -71,6 +71,28 @@ export let dataHandler = {
     },
     createNewCard: function (cardTitle, boardId, statusId, callback) {
         // creates new card, saves it and calls the callback function with its data
+    },
+    registerUser(form){
+
+        this._api_post('/register', form, function(serverResponse){
+            if(serverResponse.userid){
+                console.log(serverResponse);
+            } else {
+                alert('This username has been taken');
+            }
+
+        });
+    },
+    loginUser(form){
+        this._api_post('/login', form, function(serverResponse){
+            if(serverResponse.userid){
+                console.log(serverResponse);
+            } else {
+                alert('This username has been taken');
+            }
+
+        });
+
     }
     // here comes more features
 };

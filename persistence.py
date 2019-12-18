@@ -54,3 +54,28 @@ def get_boards(force=False):
 
 def get_cards(force=False):
     return _get_data('cards', 'cards', force)
+
+
+@connection.connection_handler
+def insert_user(cursor, data):
+    cursor.execute("""
+                    INSERT INTO users (username, password)
+                    VALUES (%(user_name)s, %(pw)s)
+                    RETURNING id""",
+                   {
+                       'user_name': data['username'],
+                       'pw': data['password']
+                   })
+    return cursor.fetchone()
+
+
+@connection.connection_handler
+def get_user_id(cursor, username):
+    cursor.execute("""
+                    SELECT * FROM users
+                    WHERE username = %(uname)s
+                    """,
+                   {
+                       'uname': username
+                   })
+    return cursor.fetchone()
