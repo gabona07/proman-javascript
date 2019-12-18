@@ -34,6 +34,17 @@ def create_new_board():
         return data_handler.create_new_board(title)
 
 
+@app.route("/create-new-card", methods=['POST'])
+@json_response
+def create_new_card():
+    """
+    Create new board
+    """
+    if request.method == 'POST':
+        card_attributes = request.json
+        return data_handler.create_new_card(card_attributes)
+
+
 @app.route("/get-cards/<int:board_id>")
 @json_response
 def get_cards_by_board_id(board_id: int):

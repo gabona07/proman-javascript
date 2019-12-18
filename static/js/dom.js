@@ -27,7 +27,7 @@ export let dom = {
                 <div class="board mb-3" id="board-container-${board.id}">
                     <div class="row" id="board-header">
                         <h3 class="text-left" id="board-title">${board.title}</h3>
-                        <button class="btn btn-secondary text-left btn-lg">+ New Card</button>
+                        <button class="btn btn-secondary text-left btn-lg" id="add-new-card">+ New Card</button>
                         <button class="btn btn-secondary ml-auto btn-lg">Show / Hide</button>
                     </div>
                     <div class="row">
@@ -39,11 +39,18 @@ export let dom = {
                 </div>
             `;
         }
-
         const outerHtml = `${boardList}`;
 
         let boardsContainer = document.querySelector('#boards');
         boardsContainer.insertAdjacentHTML("beforeend", outerHtml);
+
+        // Add event listener to new card button
+        let newCardButtons = document.querySelectorAll("#add-new-card");
+        for (let button of newCardButtons) {
+            button.setAttribute('data-toggle', 'modal');
+            button.setAttribute('data-target', '#staticBackdrop');
+            button.addEventListener("click", this.createCardModal)
+        }
     },
     loadCards: function (boardId) {
         // retrieves cards and makes showCards called
@@ -66,6 +73,40 @@ export let dom = {
             const cardColumn = document.querySelector(`#board-column-${cardStatusId}-${cardBoardId}`);
             cardColumn.appendChild(cardContainer)
         }
+    },
+    createCardModal: function() {
+        const modalBody = document.querySelector('.modal-body');
+        modalBody.innerHTML = '';
+        document.querySelector('#modalTitle').textContent = 'Add New Card';
+        const form = document.createElement('form');
+        form.setAttribute('id','createCardForm');
+        const input = document.createElement('input');
+        input.setAttribute('type', 'text');
+        input.setAttribute('placeholder', 'card-title');
+        input.setAttribute('name', 'card-title');
+        input.setAttribute('autocomplete', 'off');
+        input.setAttribute('required', 'required');
+        form.appendChild(input);
+        const addButton = document.createElement('a');
+        addButton.setAttribute('type', 'submit');
+        addButton.setAttribute('id','addCardButton');
+        addButton.setAttribute('data-dismiss','modal');
+        addButton.classList.add('btn', 'btn-primary');
+        addButton.textContent = 'Add Card';
+        form.appendChild(addButton);
+        modalBody.appendChild(form);
+        document.querySelector('#addCardButton').addEventListener('click',
+    function() {
+                let cardForm = document.getElementById('createCardForm');
+                let formData = new FormData(cardForm);
+                console.log(formData);
+                dataHandler.createNewCard(formData, function () {
+                    // show boards needs a board parameter as an iterable array
+                    //dom.showBoards();
+                    window.location.reload(true);
+                })
+            }
+        )
     },
     createBoardModal: function() {
         const modalBody = document.querySelector('.modal-body');

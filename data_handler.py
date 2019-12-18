@@ -28,6 +28,13 @@ def create_new_board(title):
     return persistence.create_new_board(title_name)
 
 
+def create_new_card(card_attributes):
+    card_title = card_attributes['card-title']
+    board_id = 1
+    status_id = 0
+    return persistence.create_new_card(card_title, board_id, status_id)
+
+
 def get_cards_by_board_id(board_id):
     persistence.clear_cache()
     all_cards = persistence.get_cards()
