@@ -3,8 +3,8 @@ import { dataHandler } from "./data_handler.js";
 
 export let dom = {
     init: function () {
-        document.querySelector('#register').addEventListener('click', this.registerModal)
-        document.querySelector('#newBoard').addEventListener('click', this.createBoardModal)
+        document.querySelector('#register').addEventListener('click', this.registerModal);
+        document.querySelector('#newBoard').addEventListener('click', this.createBoardModal);
         // This function should run once, when the page is loaded.
     },
     loadBoards: function () {
@@ -25,30 +25,22 @@ export let dom = {
         for(let board of boards){
             boardList += `
                 <div class="board mb-3" id="board-container-${board.id}">
-                <div class="row" id="board-header">
-                    <h3 class="text-left" id="board-title">${board.title}</h3>
-                    <button class="btn btn-secondary text-left btn-lg">+ New Card</button>
-                    <button class="btn btn-secondary ml-auto btn-lg">Show / Hide</button>
-                </div>
-                <div class="row">
-                    <div class="col status" data-board-id="1" data-status-id="1">New</div>
-                    <div class="col status" data-board-id="1" data-status-id="2">In progress</div>
-                    <div class="col status" data-board-id="1" data-status-id="3">Testing</div>
-                    <div class="col status" data-board-id="1" data-status-id="4">Done</div>
-                </div>
-                <div class="row">
-                    <div class="col" id="new"></div>
-                    <div class="col" id="in-progress"></div>
-                    <div class="col" id="testing"></div>
-                    <div class="col" id="done"></div>
-                </div>
+                    <div class="row" id="board-header">
+                        <h3 class="text-left" id="board-title">${board.title}</h3>
+                        <button class="btn btn-secondary text-left btn-lg">+ New Card</button>
+                        <button class="btn btn-secondary ml-auto btn-lg">Show / Hide</button>
+                    </div>
+                    <div class="row">
+                        <div class="col status" id="board-column-0-${board.id}">New</div>
+                        <div class="col status" id="board-column-1-${board.id}">In progress</div>
+                        <div class="col status" id="board-column-2-${board.id}">Testing</div>
+                        <div class="col status" id="board-column-3-${board.id}">Done</div>
+                    </div>
                 </div>
             `;
         }
 
-        const outerHtml = `
-            ${boardList}
-        `;
+        const outerHtml = `${boardList}`;
 
         let boardsContainer = document.querySelector('#boards');
         boardsContainer.insertAdjacentHTML("beforeend", outerHtml);
@@ -59,7 +51,7 @@ export let dom = {
             dom.showCards(cards);
         });
     },
-    showCards: function (cards) { //TODO need columns for different statuses
+    showCards: function (cards) {
         // shows the cards of a board
         // it adds necessary event listeners also
         for(let card of cards){
@@ -68,10 +60,11 @@ export let dom = {
             cardContainer.setAttribute('class', 'card');
             cardContainer.textContent = `${card.title}`;
 
-            // Get the corresponding boards for each card
-            let boardId = card.board_id;
-            let boardContainer = document.querySelector(`#board-container-${boardId}`);
-            boardContainer.appendChild(cardContainer)
+            // Get the corresponding board and column for each card
+            const cardBoardId = card.board_id;
+            const cardStatusId = card.status_id;
+            const cardColumn = document.querySelector(`#board-column-${cardStatusId}-${cardBoardId}`);
+            cardColumn.appendChild(cardContainer)
         }
     },
     createBoardModal: function() {
@@ -79,7 +72,7 @@ export let dom = {
         modalBody.innerHTML = '';
         document.querySelector('#modalTitle').textContent = 'Create new board';
         const form = document.createElement('form');
-        form.setAttribute('id','createBoardForm')
+        form.setAttribute('id','createBoardForm');
         const boardName = document.createElement('input');
         boardName.setAttribute('type', 'text');
         boardName.setAttribute('placeholder', 'Board Name');
