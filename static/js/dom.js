@@ -33,7 +33,7 @@ export let dom = {
                 <div class="board mb-3" id="board-container-${board.id}">
                     <div class="row" id="board-header">
                         <h3 class="text-left" id="board-title">${board.title}</h3>
-                        <button class="btn btn-secondary text-left btn-lg" id="add-new-card">+ New Card</button>
+                        <button class="btn btn-secondary text-left btn-lg" data-boardid="${board.id}" id="add-new-card">+ New Card</button>
                         <button class="btn btn-secondary ml-auto btn-lg"><div id="removelink" data-boardid="${board.id}">Delete Board</div></button>
                         <button class="btn btn-secondary ml-auto btn-lg">Show / Hide</button>
                     </div>
@@ -61,14 +61,19 @@ export let dom = {
             );
         }
 
-        // Add event listener to new card button
         let newCardButtons = document.querySelectorAll("#add-new-card");
         for (let button of newCardButtons) {
+            let newCardDataset = button.dataset;
+            let boardId = newCardDataset.boardid;
             button.setAttribute('data-toggle', 'modal');
             button.setAttribute('data-target', '#staticBackdrop');
-            button.addEventListener("click", this.createCardModal)
+            button.setAttribute('data-boardid', `${boardId}`);
+            button.addEventListener("click", function() {
+                dom.createCardModal(boardId)
+            })
         }
     },
+
     loadCards: function (boardId) {
         // retrieves cards and makes showCards called
         dataHandler.getCardsByBoardId(boardId, function (cards) {
@@ -91,7 +96,7 @@ export let dom = {
             cardColumn.appendChild(cardContainer)
         }
     },
-    createCardModal: function() {
+    createCardModal: function(boardId) {
         const modalBody = document.querySelector('.modal-body');
         modalBody.innerHTML = '';
         document.querySelector('#modalTitle').textContent = 'Add New Card';
@@ -117,10 +122,9 @@ export let dom = {
                 let cardForm = document.getElementById('createCardForm');
                 let formData = new FormData(cardForm);
                 console.log(formData);
-                dataHandler.createNewCard(formData, function () {
-                    // show boards needs a board parameter as an iterable array
-                    //dom.showBoards();
-                    window.location.reload(true);
+                dataHandler.createNewCard(formData, boardId, function () {
+                    // dom.showBoards(board) => show boards needs a board parameter as an iterable array TODO
+                    window.location.reload();
                 })
             }
         )
