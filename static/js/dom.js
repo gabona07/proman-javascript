@@ -5,8 +5,13 @@ export let dom = {
     init: function () {
         document.querySelector('#register').addEventListener('click', this.registerModal);
         document.querySelector('#login').addEventListener('click', this.loginModal);
-        document.querySelector('#newBoard').addEventListener('click', this.createBoardModal)
+        document.querySelector('#newBoard').addEventListener('click', this.createBoardModal);
         // This function should run once, when the page is loaded.
+    },
+    removeBoards: function(boardID) {
+        let divID = "board-container-"+boardID;
+        document.getElementById(divID).remove();
+        dataHandler.removeBoard(boardID, function(){});
     },
     loadBoards: function () {
         // retrieves boards and makes showBoards called
@@ -29,6 +34,7 @@ export let dom = {
                 <div class="row" id="board-header">
                     <h3 class="text-left" id="board-title">${board.title}</h3>
                     <button class="btn btn-secondary text-left btn-lg">+ New Card</button>
+                    <button class="btn btn-secondary ml-auto btn-lg"><div id="removelink" data-boardid="${board.id}">Delete Board</div></button>
                     <button class="btn btn-secondary ml-auto btn-lg">Show / Hide</button>
                 </div>
                 <div class="row">
@@ -60,6 +66,16 @@ export let dom = {
 
         let boardsContainer = document.querySelector('#boards');
         boardsContainer.insertAdjacentHTML("beforeend", outerHtml);
+
+        let removeLinks = document.querySelectorAll('#removelink');
+        for (let removeLink of removeLinks) {
+            let linkDataset = removeLink.dataset
+            let boardID = linkDataset.boardid
+            removeLink.addEventListener('click', function() {
+                dom.removeBoards(boardID)
+            }
+            );
+        }
     },
     loadCards: function (boardId) {
         // retrieves cards and makes showCards called
@@ -106,7 +122,7 @@ export let dom = {
         document.querySelector('#addButton').addEventListener('click',
             function() {
                         let boardForm = document.getElementById('createBoardForm');
-                        var formData = new FormData(boardForm);
+                        let formData = new FormData(boardForm);
                         dataHandler.createNewBoard(formData, function(addedBoard) {
                             dom.showBoards(addedBoard);
                         });

@@ -42,8 +42,9 @@ def create_new_board(cursor, title_data):
 @connection.connection_handler
 def remove_board(cursor, id_data):
     cursor.execute(sql.SQL("DELETE FROM {} WHERE id = (%s)").format(sql.Identifier('boards')), [id_data])
-    id_return = cursor.fetchone()
-    return id_return
+    cursor.execute(sql.SQL("DELETE FROM {} WHERE board_id = (%s)").format(sql.Identifier('cards')), [id_data])
+    status = "{'status': 'dummy'}"
+    return status
 
 
 def clear_cache():
