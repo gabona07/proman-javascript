@@ -50,9 +50,11 @@ ALTER TABLE boards
     ADD CONSTRAINT fk_user_id FOREIGN KEY (user_id)
           REFERENCES users(id) ON DELETE CASCADE;
 
+INSERT INTO users VALUES (1,'teszt');
+SELECT pg_catalog.setval('users_id_seq', 1, true);
 
 INSERT INTO boards VALUES (1,'Board 1');
-INSERT INTO boards VALUES (2,'Board 2');
+INSERT INTO boards VALUES (2,'Board 2',1);
 SELECT pg_catalog.setval('boards_id_seq', 2, true);
 
 INSERT INTO statuses VALUES (0, 'new');

@@ -20,7 +20,9 @@ def get_boards():
     """
     All the boards
     """
-    return data_handler.get_boards()
+    userid = 0
+    """TODO: REPLACE WITH REAL USER ID"""
+    return data_handler.get_boards(userid)
 
 
 @app.route("/create-new-board", methods=['POST'])
