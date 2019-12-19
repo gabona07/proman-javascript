@@ -83,23 +83,30 @@ export let dataHandler = {
             callback(response);
         })
     },
-    registerUser(form){
+    registerUser: function(form){
 
         this._api_post('/register', form, function(serverResponse){
             if(serverResponse.userid){
+                $('.modal').modal('hide');
                 console.log(serverResponse);
             } else {
                 alert('This username has been taken');
+
             }
 
         });
     },
-    loginUser(form){
+    loginUser: function(form){
         this._api_post('/login', form, function(serverResponse){
-            if(serverResponse.userid){
+            if(serverResponse.username){
+                $('.modal').modal('hide');
                 console.log(serverResponse);
+                document.querySelector('#login').textContent = 'Logged in as ' + serverResponse.username;
+                document.querySelector('#logout').textContent = 'Logout';
             } else {
-                alert('This username has been taken');
+                // alert('Wrong username or password');
+                document.querySelector('.alert').style.display = 'flex';
+                // $('.alert').alert()
             }
 
         });

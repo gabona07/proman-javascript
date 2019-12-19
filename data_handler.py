@@ -59,3 +59,11 @@ def register_user(data):
 
 def username_is_in(username):
     return persistence.get_user_id(username)
+
+
+def get_password(username):
+    return persistence.get_user_password(username)['password']
+
+
+def get_users():
+    return persistence.get_user_data()
