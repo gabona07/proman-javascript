@@ -158,7 +158,7 @@ export let dom = {
         addButton.setAttribute('type', 'submit');
         addButton.setAttribute('id','addCardButton');
         addButton.setAttribute('data-dismiss','modal');
-        addButton.classList.add('btn', 'btn-primary');
+        addButton.classList.add('btn', 'btn-secondary');
         addButton.textContent = 'Add Card';
         form.appendChild(addButton);
         modalBody.appendChild(form);
@@ -191,7 +191,7 @@ export let dom = {
         addButton.setAttribute('type', 'button');
         addButton.setAttribute('id','addButton');
         addButton.setAttribute('data-dismiss','modal');
-        addButton.classList.add('btn', 'btn-primary');
+        addButton.setAttribute('class','btn btn-secondary');
         addButton.textContent = 'Submit';
         form.appendChild(addButton);
         modalBody.appendChild(form);
@@ -223,7 +223,7 @@ export let dom = {
         addButton.setAttribute('type', 'submit');
         addButton.setAttribute('id', 'addRenameButton');
         addButton.setAttribute('data-dismiss', 'modal');
-        addButton.classList.add('btn', 'btn-primary');
+        addButton.setAttribute('class', 'btn btn-secondary');
         addButton.textContent = 'Submit';
         form.appendChild(addButton);
         modalBody.appendChild(form);
