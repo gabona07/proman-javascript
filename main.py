@@ -80,7 +80,7 @@ def get_cards_by_board_id(board_id: int):
 @app.route("/delete/board/<int:board_id>")
 @json_response
 def remove_board(board_id: int):
-    return data_handler.remove_board(board_id)
+    return data_handler.remove_board(board_id, session)
 
 
 @app.route("/delete/card/<int:card_id>")
