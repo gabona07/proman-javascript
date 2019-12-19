@@ -34,6 +34,14 @@ def get_boards(session):
     return newBoardData
 
 
+def get_board(board_id):
+    """
+    Find the board by id
+    :return:
+    """
+    return persistence._read_table_by_id(board_id, 'boards')
+
+
 def create_new_board(title, session):
     """
     Create new board

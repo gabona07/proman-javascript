@@ -16,6 +16,19 @@ def _read_table(cursor, table_name):
     return table_data
 
 
+@connection.connection_handler
+def _read_table_by_id(cursor, id_, table_name):
+    """
+    Reads content of a table
+    :param table_name: table's name in the database
+    :return: OrderedDict
+    """
+    id_data = int(id_)
+    cursor.execute(sql.SQL("SELECT * FROM {} WHERE id = (%s)").format(sql.Identifier(table_name)), [id_data])
+    table_data = cursor.fetchall()
+    return table_data
+
+
 def _get_data(data_type, table_name, force):
     """
     Reads defined type of data from file or cache
