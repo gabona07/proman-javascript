@@ -124,6 +124,7 @@ export let dom = {
         }
     },
     createCardModal: function(boardId) {
+        document.querySelector('.alert').style.display = 'none';
         const modalBody = document.querySelector('.modal-body');
         modalBody.innerHTML = '';
         document.querySelector('#modalTitle').textContent = 'Add New Card';
@@ -156,6 +157,7 @@ export let dom = {
         )
     },
     createBoardModal: function() {
+        document.querySelector('.alert').style.display = 'none';
         const modalBody = document.querySelector('.modal-body');
         modalBody.innerHTML = '';
         document.querySelector('#modalTitle').textContent = 'Create new board';
