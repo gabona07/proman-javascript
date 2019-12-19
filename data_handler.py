@@ -43,11 +43,18 @@ def create_new_board(title, session):
     return persistence.create_new_board(title_name, userid)
 
 
-def remove_board(board_id):
+def remove_board(board_id, session):
     """
     Remove board
     """
-    return persistence.remove_board(board_id)
+    userid = get_user_id(session)
+    ownerid_data = persistence.get_board_owner(board_id)
+    ownerid = ownerid_data['user_id']
+    if ((ownerid is None) or (ownerid == userid)):
+        return persistence.remove_board(board_id)
+    else:
+        status = "{'status': 'you are not the owner'}"
+        return status
 
 
 def create_new_card(data, board_id):
