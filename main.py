@@ -25,6 +25,15 @@ def get_boards():
     return data_handler.get_boards(session)
 
 
+@app.route("/get-board/<board_id>")
+@json_response
+def get_board(board_id):
+    """
+    All the boards
+    """
+    return data_handler.get_board(board_id)
+
+
 @app.route("/create-new-board", methods=['POST'])
 @json_response
 def create_new_board():
@@ -43,10 +52,19 @@ def create_new_card(board_id: int):
     Create new board
     """
     if request.method == 'POST':
-        card_attributes = request.json
-        card_title = card_attributes['card-title']
-        status_id = 0
-        return data_handler.create_new_card(card_title, board_id, status_id)
+        data = request.json
+        return data_handler.create_new_card(data, board_id)
+
+
+@app.route("/rename-board/<board_id>", methods=['POST'])
+@json_response
+def rename_board(board_id):
+    """
+    Rename board
+    """
+    if request.method == 'POST':
+        title = request.json
+        return data_handler.rename_board(title['boardname'], board_id)
 
 
 @app.route("/get-cards/<int:board_id>")
@@ -62,7 +80,7 @@ def get_cards_by_board_id(board_id: int):
 @app.route("/delete/board/<int:board_id>")
 @json_response
 def remove_board(board_id: int):
-    return data_handler.remove_board(board_id)
+    return data_handler.remove_board(board_id, session)
 
 
 @app.route("/delete/card/<int:card_id>")

@@ -6,6 +6,15 @@ export let dom = {
         document.querySelector('#register').addEventListener('click', this.registerModal);
         document.querySelector('#login').addEventListener('click', this.loginModal);
         document.querySelector('#newBoard').addEventListener('click', this.createBoardModal);
+        document.querySelector('#refresh').addEventListener('click', this.loadBoards);
+        const interval = setInterval(function() {
+           ;
+        }, 60000);
+        function updateTable() {
+            dom.loadBoards();
+            setTimeout(updateTable, 60000);
+        }
+        updateTable();
         // This function should run once, when the page is loaded.
     },
     removeBoards: function(boardID) {
@@ -28,11 +37,21 @@ export let dom = {
             }
         });
     },
+    loadBoardByID: function (boardID) {
+        // retrieves a boards and makes showBoards called
+        dataHandler.getBoard(boardID, function(boardID){
+            dom.showBoards(boardID);
+            dom.loadCards(boardID);
+        });
+    },
     showBoard: function (board) {
         let boardNode =
             `<div class="board mb-3" id="board-container-${board.id}">
                     <div class="row" id="board-header">
                         <h3 class="text-left" id="board-title">${board.title}</h3>
+                        <button class="btn btn-secondary text-left btn-lg renameButton" data-toggle="modal" data-target="#staticBackdrop" id="renamelink" data-boardid="${board.id}">
+                            <i class="fas fa-pencil-alt"></i>
+                        </button>
                         <button class="btn btn-secondary text-left btn-lg" data-boardid="${board.id}" id="add-new-card">+ New Card</button>
                         <button class="btn btn-secondary ml-auto btn-lg"><div id="removelink" data-boardid="${board.id}">Delete Board</div></button>
                         <button class="btn btn-secondary ml-auto btn-lg" data-boardid="${board.id}" id="show-hide-data">Show / Hide</button>
@@ -51,7 +70,12 @@ export let dom = {
         boardsContainer.insertAdjacentHTML("beforeend", boardNode);
         const actionButtons = document.querySelectorAll('#boards > div:last-child > div > button');
 
-        let newCardButton = actionButtons[0];
+        const renameLink = actionButtons[0];
+        renameLink.addEventListener('click', function() {
+            dom.renameBoardModal(board.id)
+        });
+
+        let newCardButton = actionButtons[1];
         newCardButton.setAttribute('data-toggle', 'modal');
         newCardButton.setAttribute('data-target', '#staticBackdrop');
         newCardButton.setAttribute('data-boardid', `${board.id}`);
@@ -59,12 +83,12 @@ export let dom = {
         newCardButton.addEventListener('click', function() {
             dom.createCardModal(board.id)
         });
-        let removeLink = actionButtons[1];
+        let removeLink = actionButtons[2];
         removeLink.addEventListener('click', function() {
             dom.removeBoards(board.id);
         });
 
-        let showHideButton = actionButtons[2];
+        let showHideButton = actionButtons[3];
         let boardId = board['id'];
         let boardDataContainer = document.querySelector(`#board-data-${boardId}`);
         boardDataContainer.style.display = 'none';
@@ -188,6 +212,38 @@ export let dom = {
                         });
                     }
         )
+    },
+    renameBoardModal: function(boardID) {
+        const modalBody = document.querySelector('.modal-body');
+        modalBody.innerHTML = '';
+        document.querySelector('#modalTitle').textContent = 'Rename board';
+        const form = document.createElement('form');
+        form.setAttribute('id', 'renameBoardForm');
+        const boardName = document.createElement('input');
+        boardName.setAttribute('type', 'text');
+        boardName.setAttribute('placeholder', 'Board Name');
+        boardName.setAttribute('name', 'boardname');
+        boardName.setAttribute('autocomplete', 'off');
+        boardName.setAttribute('required', 'required');
+        form.appendChild(boardName);
+        const addButton = document.createElement('a');
+        addButton.setAttribute('type', 'submit');
+        addButton.setAttribute('id', 'addRenameButton');
+        addButton.setAttribute('data-dismiss', 'modal');
+        addButton.classList.add('btn', 'btn-primary');
+        addButton.textContent = 'Submit';
+        form.appendChild(addButton);
+        modalBody.appendChild(form);
+        document.querySelector('#addRenameButton').addEventListener('click',
+            function () {
+                let boardForm = document.getElementById('renameBoardForm');
+                let formData = new FormData(boardForm);
+                dataHandler.renameBoard(formData, boardID, function (renamedBoard) {
+                    let renamedBoardID = renamedBoard[0];
+                    let divID = "board-container-"+renamedBoardID;
+                    document.getElementById(divID).remove();
+                    dom.loadBoardByID(renamedBoardID)})
+            });
     },
     registerModal: function(){
             document.querySelector('.alert').style.display = 'none';
