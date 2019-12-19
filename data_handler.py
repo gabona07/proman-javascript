@@ -34,6 +34,14 @@ def get_boards(session):
     return newBoardData
 
 
+def get_board(board_id):
+    """
+    Find the board by id
+    :return:
+    """
+    return persistence._read_table_by_id(board_id, 'boards')
+
+
 def create_new_board(title, session):
     """
     Create new board
@@ -41,6 +49,14 @@ def create_new_board(title, session):
     title_name = title['boardname']
     userid = get_user_id(session)
     return persistence.create_new_board(title_name, userid)
+
+
+def rename_board(title, id_):
+    """
+    Rename board
+    :return: OK/NOT OK TODO
+    """
+    return persistence.rename_board(title, id_)
 
 
 def remove_board(board_id):
