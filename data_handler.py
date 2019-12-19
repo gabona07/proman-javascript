@@ -1,4 +1,5 @@
 import persistence
+from util import verify_password
 
 
 def get_card_title(status_id):
@@ -25,6 +26,7 @@ def create_new_board(title):
     """
     title_name = title['boardname']
     return persistence.create_new_board(title_name)
+
 
 def remove_board(board_id):
     """
@@ -55,6 +57,17 @@ def register_user(data):
         return {'userid': persistence.insert_user(data)['id']}
     else:
         return {'userid': None}
+
+
+def login_user(data, session):
+    db_data = get_users()
+
+    for row in db_data:
+        if row['username'] == data['username'] and verify_password(data['password'], row['password']):
+            session['username'] = data['username']
+            session['user_id'] = row['id']
+            return {'id': session['user_id'], 'username': data['username']}
+    return {'username': None}
 
 
 def username_is_in(username):

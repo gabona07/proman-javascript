@@ -77,19 +77,14 @@ def register():
 def login():
     if request.method == 'POST':
         data = request.json
-        db_data = data_handler.get_users()
-        for row in db_data:
-            if row['username'] == data['username'] and verify_password(data['password'], row['password']):
-                session['username'] = data['username']
-                session['user_id'] = row['id']
-                return {'id': session['user_id'], 'username': data['username']}
-        return {'username': None}
+        return data_handler.login_user(data, session)
 
 
 @app.route('/logout')
 def logout():
-    session.pop('username', None)
+    session.clear()
     return redirect(url_for('index'))
+
 
 def main():
     app.run(debug=True)

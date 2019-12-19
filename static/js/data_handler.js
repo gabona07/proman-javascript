@@ -83,34 +83,19 @@ export let dataHandler = {
             callback(response);
         })
     },
-    registerUser: function(form){
+    registerUser: function(form, callback){
 
-        this._api_post('/register', form, function(serverResponse){
-            if(serverResponse.userid){
-                $('.modal').modal('hide');
-                console.log(serverResponse);
-            } else {
-                alert('This username has been taken');
-
-            }
-
+        this._api_post('/register', form, (response) => {
+            this._data = response;
+            callback(response);
         });
     },
-    loginUser: function(form){
-        this._api_post('/login', form, function(serverResponse){
-            if(serverResponse.username){
-                $('.modal').modal('hide');
-                console.log(serverResponse);
-                document.querySelector('#login').textContent = 'Logged in as ' + serverResponse.username;
-                document.querySelector('#logout').textContent = 'Logout';
-            } else {
-                // alert('Wrong username or password');
-                document.querySelector('.alert').style.display = 'flex';
-                // $('.alert').alert()
-            }
+    loginUser: function(form, callback){
 
+        this._api_post('/login', form, (response) => {
+            this._data = response;
+            callback(response);
         });
-
     }
     // here comes more features
 };
