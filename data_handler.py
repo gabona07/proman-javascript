@@ -43,8 +43,6 @@ def create_new_board(title, session):
     return persistence.create_new_board(title_name, userid)
 
 
-
-
 def remove_board(board_id):
     """
     Remove board
