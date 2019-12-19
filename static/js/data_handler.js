@@ -96,21 +96,12 @@ export let dataHandler = {
 
         });
     },
-    loginUser: function(form){
-        this._api_post('/login', form, function(serverResponse){
-            if(serverResponse.username){
-                $('.modal').modal('hide');
-                console.log(serverResponse);
-                document.querySelector('#login').textContent = 'Logged in as ' + serverResponse.username;
-                document.querySelector('#logout').textContent = 'Logout';
-            } else {
-                // alert('Wrong username or password');
-                document.querySelector('.alert').style.display = 'flex';
-                // $('.alert').alert()
-            }
-
+    loginUser: function(form, callback){
+        this._api_post('/login', form, (response) => {
+            this._data = response;
+            response = response;
+            callback(response);
         });
-
     }
     // here comes more features
 };
