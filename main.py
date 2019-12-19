@@ -33,7 +33,7 @@ def create_new_board():
     """
     if request.method == 'POST':
         title = request.json
-        return data_handler.create_new_board(title,session)
+        return data_handler.create_new_board(title, session)
 
 
 @app.route("/create-new-card-<int:board_id>", methods=['POST'])
@@ -90,6 +90,7 @@ def login():
 def logout():
     session.clear()
     return redirect(url_for('index'))
+
 
 def main():
     app.run(debug=True)

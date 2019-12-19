@@ -34,7 +34,8 @@ def create_new_board(cursor, title_data, userid):
     """
     Adds new table
     """
-    cursor.execute(sql.SQL("INSERT INTO {} (title, user_id) VALUES (%s, %s) RETURNING id, title, user_id").format(sql.Identifier('boards')), [title_data, userid])
+    cursor.execute(sql.SQL("INSERT INTO {} (title, user_id) VALUES (%s, %s) RETURNING id, title, user_id").format(
+        sql.Identifier('boards')), [title_data, userid])
     data_return = cursor.fetchone()
     return data_return
 
@@ -52,7 +53,9 @@ def create_new_card(cursor, title_data, board_id_data, status_id):
     """
     Adds new card
     """
-    cursor.execute(sql.SQL("INSERT INTO {} (title, board_id, status_id) VALUES (%s, %s, %s) RETURNING id, title").format(sql.Identifier('cards')), [title_data, board_id_data, status_id])
+    cursor.execute(
+        sql.SQL("INSERT INTO {} (title, board_id, status_id) VALUES (%s, %s, %s) RETURNING id, title").format(
+            sql.Identifier('cards')), [title_data, board_id_data, status_id])
     id_return = cursor.fetchone()
     return id_return
 
