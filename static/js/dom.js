@@ -15,6 +15,7 @@ export let dom = {
     },
     loadBoards: function () {
         // retrieves boards and makes showBoards called
+        document.querySelector('#boards').innerHTML = "";
         dataHandler.getBoards(function(boards){
             dom.showBoards  (boards);
             for (let board of boards) {
@@ -223,7 +224,19 @@ export let dom = {
             submitButton.textContent = ' Submit';
             form.appendChild(submitButton);
             submitButton.addEventListener('click', function(){
-                dataHandler.loginUser(new FormData(form))
+                dataHandler.loginUser(new FormData(form), function(serverResponse){
+                    if(serverResponse.username){
+                        $('.modal').modal('hide');
+                        document.querySelector('#login').textContent = 'Logged in as ' + serverResponse.username;
+                        document.querySelector('#logout').textContent = 'Logout';
+                        dom.loadBoards();
+                    } else {
+                        // alert('Wrong username or password');
+                        document.querySelector('.alert').style.display = 'flex';
+                        // $('.alert').alert()
+                    }
+
+                        })
             });
             modalBody.appendChild(form)
 
