@@ -10,6 +10,7 @@ def get_card_title(status_id):
     statuses = persistence.get_statuses()
     return next((status['title'] for status in statuses if str(status['id']) == str(status_id)), 'Unknown')
 
+
 def get_user_id(session):
     if(session):
         userid = session['user_id']
@@ -27,7 +28,7 @@ def get_boards(session):
     boardDatas = persistence.get_boards(force=True)
     newBoardData = []
     for boardData in boardDatas:
-        if((boardData['user_id'] == None) or (boardData['user_id'] == userid)):
+        if((boardData['user_id'] is None) or (boardData['user_id'] == userid)):
             newBoardData.append(boardData)
     return newBoardData
 
@@ -39,6 +40,7 @@ def create_new_board(title, session):
     title_name = title['boardname']
     userid = get_user_id(session)
     return persistence.create_new_board(title_name, userid)
+
 
 def remove_board(board_id):
     """
