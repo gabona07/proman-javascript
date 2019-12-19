@@ -44,6 +44,10 @@ export let dataHandler = {
     },
     getBoard: function (boardId, callback) {
         // the board is retrieved and then the callback function is called with the board
+        this._api_get('/get-board/' + `${boardId}`, (response) => {
+            this._data = response;
+            callback(response);
+        });
     },
     getStatuses: function (callback) {
         // the statuses are retrieved and then the callback function is called with the statuses
@@ -93,6 +97,14 @@ export let dataHandler = {
             this._data = response;
             callback(response);
         });
+    },
+    renameBoard: function (boardTitle, boardID, callback) {
+        // rename board, saves it and calls the callback function with its data
+        this._api_post('/rename-board/' + `${boardID}`, boardTitle, (response) => {
+            this._data = response;
+            response = [response];
+            callback(response);
+        })
     },
     loginUser: function(form, callback){
         this._api_post('/login', form, (response) => {
