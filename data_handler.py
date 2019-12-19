@@ -50,10 +50,12 @@ def remove_board(board_id):
     return persistence.remove_board(board_id)
 
 
-def create_new_card(card_title, board_id, status_id):
+def create_new_card(data, board_id):
     """
     Add new card to the first column of the given board
     """
+    card_title = data['card-title']
+    status_id = 0
     return persistence.create_new_card(card_title, board_id, status_id)
 
 
