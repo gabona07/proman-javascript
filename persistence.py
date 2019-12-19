@@ -61,6 +61,13 @@ def get_board_owner(cursor, board_id):
 
 
 @connection.connection_handler
+def get_board_owner(cursor, board_id):
+    cursor.execute(sql.SQL("SELECT user_id FROM boards WHERE id = (%s)"), [board_id])
+    data_return = cursor.fetchone()
+    return data_return
+
+
+@connection.connection_handler
 def remove_board(cursor, id_data):
     cursor.execute(sql.SQL("DELETE FROM {} WHERE id = (%s)").format(sql.Identifier('boards')), [id_data])
     cursor.execute(sql.SQL("DELETE FROM {} WHERE board_id = (%s)").format(sql.Identifier('cards')), [id_data])

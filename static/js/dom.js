@@ -7,14 +7,7 @@ export let dom = {
         document.querySelector('#login').addEventListener('click', this.loginModal);
         document.querySelector('#newBoard').addEventListener('click', this.createBoardModal);
         document.querySelector('#refresh').addEventListener('click', this.loadBoards);
-        const interval = setInterval(function() {
-           ;
-        }, 60000);
-        function updateTable() {
-            dom.loadBoards();
-            setTimeout(updateTable, 60000);
-        }
-        updateTable();
+        setTimeout(this.loadBoards, 60000);
         // This function should run once, when the page is loaded.
     },
     removeBoards: function(boardID) {
