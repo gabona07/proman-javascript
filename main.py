@@ -22,7 +22,7 @@ def get_boards():
     """
     All the boards
     """
-    return data_handler.get_boards(session=session)
+    return data_handler.get_boards(session)
 
 
 @app.route("/create-new-board", methods=['POST'])
@@ -33,7 +33,7 @@ def create_new_board():
     """
     if request.method == 'POST':
         title = request.json
-        return data_handler.create_new_board(title)
+        return data_handler.create_new_board(title,session)
 
 
 @app.route("/create-new-card-<int:board_id>", methods=['POST'])
