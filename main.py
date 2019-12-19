@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for, request, redirect, session
-from util import json_response, hash_password, verify_password
+from util import json_response
 
 import data_handler
 
@@ -75,7 +75,6 @@ def remove_card(card_id: int):
 def register():
     if request.method == 'POST':
         data = request.json
-        data['password'] = hash_password(data['password'])
         return data_handler.register_user(data)
 
 
