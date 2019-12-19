@@ -82,6 +82,12 @@ export let dataHandler = {
             callback(response);
         })
     },
+    removeCard: function (cardId, callback) {
+        this._api_get('/delete/card/' + `${cardId}`, (response) => {
+            this._data = response;
+            callback(response);
+        });
+    },
     registerUser: function(form){
 
         this._api_post('/register', form, function(serverResponse){

@@ -65,6 +65,12 @@ def remove_board(board_id: int):
     return data_handler.remove_board(board_id)
 
 
+@app.route("/delete/card/<int:card_id>")
+@json_response
+def remove_card(card_id: int):
+    return data_handler.remove_card(card_id)
+
+
 @app.route('/register', methods=['POST'])
 def register():
     if request.method == 'POST':

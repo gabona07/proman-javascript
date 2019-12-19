@@ -108,3 +108,8 @@ def get_user_data(cursor):
                     SELECT id, username, password FROM users
                     """)
     return cursor.fetchall()
+
+
+@connection.connection_handler
+def remove_card(cursor, card_id):
+    cursor.execute(sql.SQL("DELETE FROM {} WHERE id = (%s)").format(sql.Identifier('cards')), [card_id])
