@@ -98,7 +98,6 @@ export let dataHandler = {
     loginUser: function(form, callback){
         this._api_post('/login', form, (response) => {
             this._data = response;
-            response = response;
             callback(response);
         });
     }
