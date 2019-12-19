@@ -30,11 +30,11 @@ def _get_data(data_type, table_name, force):
 
 
 @connection.connection_handler
-def create_new_board(cursor, title_data):
+def create_new_board(cursor, title_data, userid):
     """
     Adds new table
     """
-    cursor.execute(sql.SQL("INSERT INTO {} (title) VALUES (%s) RETURNING id, title, user_id").format(sql.Identifier('boards')), [title_data])
+    cursor.execute(sql.SQL("INSERT INTO {} (title, user_id) VALUES (%s, %s) RETURNING id, title, user_id").format(sql.Identifier('boards')), [title_data, userid])
     data_return = cursor.fetchone()
     return data_return
 
