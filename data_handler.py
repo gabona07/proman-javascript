@@ -1,5 +1,5 @@
 import persistence
-from util import verify_password
+from util import verify_password, hash_password
 
 
 def get_card_title(status_id):
@@ -70,6 +70,7 @@ def get_cards_by_board_id(board_id):
 
 
 def register_user(data):
+    data['password'] = hash_password(data['password'])
     if not username_is_in(data['username']):
         return {'userid': persistence.insert_user(data)['id']}
     else:
