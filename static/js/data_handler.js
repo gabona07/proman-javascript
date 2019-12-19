@@ -89,15 +89,6 @@ export let dataHandler = {
         });
     },
     registerUser: function(form, callback){
-
-        this._api_post('/register', form, function(serverResponse){
-            if(serverResponse.userid){
-                $('.modal').modal('hide');
-                console.log(serverResponse);
-            } else {
-                alert('This username has been taken');
-
-            }
         this._api_post('/register', form, (response) => {
             this._data = response;
             callback(response);
