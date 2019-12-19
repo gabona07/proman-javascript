@@ -71,7 +71,6 @@ export let dataHandler = {
         // creates new board, saves it and calls the callback function with its data
         this._api_post('/create-new-board', boardTitle, (response) => {
             this._data = response;
-            response = [response];
             callback(response);
         })
     },
