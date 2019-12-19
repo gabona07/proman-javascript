@@ -42,6 +42,7 @@ def create_new_board(title, session):
     return persistence.create_new_board(title_name, userid)
 
 
+
 def remove_board(board_id):
     """
     Remove board
@@ -83,3 +84,7 @@ def get_password(username):
 
 def get_users():
     return persistence.get_user_data()
+
+
+def remove_card(card_id):
+    return persistence.remove_card(card_id)

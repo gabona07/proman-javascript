@@ -13,6 +13,11 @@ export let dom = {
         document.getElementById(divID).remove();
         dataHandler.removeBoard(boardID, function(){});
     },
+    removeCard: function(cardId) {
+        let cardDiv = "card-container-" + cardId;
+        document.getElementById(cardDiv).remove();
+        dataHandler.removeCard(cardId, function () {})
+    },
     loadBoards: function () {
         // retrieves boards and makes showBoards called
         document.querySelector('#boards').innerHTML = "";
@@ -91,14 +96,31 @@ export let dom = {
         for(let card of cards){
             // Create card container div element
             const cardContainer = document.createElement('div');
-            cardContainer.setAttribute('class', 'card');
             cardContainer.textContent = `${card.title}`;
+            cardContainer.setAttribute('class', 'card');
+            cardContainer.setAttribute('id', `card-container-${card.id}`);
+
+            // Create trash icon
+            let trashBinIcon = document.createElement('img');
+            trashBinIcon.setAttribute('src', '../static/css/images/Trash-icon.png');
+            trashBinIcon.setAttribute('width', '36');
+            trashBinIcon.setAttribute('height', '36');
+
+            // Create trash button
+            let trashButton = document.createElement('button');
+            trashButton.style.border = 'none';
+            trashButton.style.backgroundColor = '#f7f7f7';
+            trashButton.appendChild(trashBinIcon);
+            trashButton.addEventListener('click', function () {
+                dom.removeCard(card.id);
+            });
 
             // Get the corresponding board and column for each card
             const cardBoardId = card.board_id;
             const cardStatusId = card.status_id;
             const cardColumn = document.querySelector(`#board-column-${cardStatusId}-${cardBoardId}`);
-            cardColumn.appendChild(cardContainer)
+            cardColumn.appendChild(cardContainer);
+            cardContainer.appendChild(trashButton)
         }
     },
     createCardModal: function(boardId) {
