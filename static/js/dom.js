@@ -143,7 +143,7 @@ export let dom = {
         boardName.setAttribute('required', 'required');
         form.appendChild(boardName);
         const addButton = document.createElement('a');
-        addButton.setAttribute('type', 'submit');
+        addButton.setAttribute('type', 'button');
         addButton.setAttribute('id','addButton');
         addButton.setAttribute('data-dismiss','modal');
         addButton.classList.add('btn', 'btn-primary');
@@ -162,6 +162,7 @@ export let dom = {
         )
     },
     registerModal: function(){
+            document.querySelector('.alert').style.display = 'none';
             const modalBody = document.querySelector('.modal-body');
             const form = document.createElement('form');
             form.setAttribute('id', 'registerForm');
@@ -185,13 +186,15 @@ export let dom = {
             submitButton.setAttribute('id', 'registerButton');
             submitButton.classList.add('btn', 'btn-secondary');
             submitButton.textContent = ' Submit';
+
             form.appendChild(submitButton);
             submitButton.addEventListener('click', function(){
                 dataHandler.registerUser(new FormData(form))
             });
             modalBody.appendChild(form)
     },
-    loginModal: function(){
+    loginModal: () => {
+            document.querySelector('.alert').style.display = 'none';
             const modalBody = document.querySelector('.modal-body');
             const form = document.createElement('form');
             form.setAttribute('id', 'registerForm');
@@ -220,6 +223,9 @@ export let dom = {
                 dataHandler.loginUser(new FormData(form))
             });
             modalBody.appendChild(form)
+
+    },
+    logout: function(){
 
     }
     // here comes more features

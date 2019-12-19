@@ -1,17 +1,19 @@
-from flask import Flask, render_template, url_for, request, redirect
-from util import json_response, hash_password
+from flask import Flask, render_template, url_for, request, redirect, session
+from util import json_response, hash_password, verify_password
 
 import data_handler
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 1
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+
 
 @app.route("/")
 def index():
     """
     This is a one-pager which shows all the boards and cards
     """
-    return render_template('index.html')
+    return render_template('index.html', session=session)
 
 
 @app.route("/get-boards")
@@ -77,8 +79,19 @@ def register():
 def login():
     if request.method == 'POST':
         data = request.json
-        print(data)
-    pass
+        db_data = data_handler.get_users()
+        for row in db_data:
+            if row['username'] == data['username'] and verify_password(data['password'], row['password']):
+                session['username'] = data['username']
+                session['user_id'] = row['id']
+                return {'id': session['user_id'], 'username': data['username']}
+        return {'username': None}
+
+
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('index'))
 
 def main():
     app.run(debug=True)
