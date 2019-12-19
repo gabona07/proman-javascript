@@ -13,64 +13,74 @@ export let dom = {
         document.getElementById(divID).remove();
         dataHandler.removeBoard(boardID, function(){});
     },
+    removeCard: function(cardId) {
+        let cardDiv = "card-container-" + cardId;
+        document.getElementById(cardDiv).remove();
+        dataHandler.removeCard(cardId, function () {})
+    },
     loadBoards: function () {
         // retrieves boards and makes showBoards called
+        document.querySelector('#boards').innerHTML = "";
         dataHandler.getBoards(function(boards){
-            dom.showBoards(boards);
+            dom.showBoards  (boards);
             for (let board of boards) {
                 dom.loadCards(board.id);
             }
         });
     },
-    showBoards: function (boards) {
-        // shows boards appending them to #boards div
-        // it adds necessary event listeners also
-
-        let boardList = '';
-
-        for(let board of boards){
-            boardList += `
-                <div class="board mb-3" id="board-container-${board.id}">
+    showBoard: function (board) {
+        let boardNode =
+            `<div class="board mb-3" id="board-container-${board.id}">
                     <div class="row" id="board-header">
                         <h3 class="text-left" id="board-title">${board.title}</h3>
                         <button class="btn btn-secondary text-left btn-lg" data-boardid="${board.id}" id="add-new-card">+ New Card</button>
                         <button class="btn btn-secondary ml-auto btn-lg"><div id="removelink" data-boardid="${board.id}">Delete Board</div></button>
-                        <button class="btn btn-secondary ml-auto btn-lg">Show / Hide</button>
+                        <button class="btn btn-secondary ml-auto btn-lg" data-boardid="${board.id}" id="show-hide-data">Show / Hide</button>
                     </div>
-                    <div class="row">
-                        <div class="col status" id="board-column-0-${board.id}">New</div>
-                        <div class="col status" id="board-column-1-${board.id}">In progress</div>
-                        <div class="col status" id="board-column-2-${board.id}">Testing</div>
-                        <div class="col status" id="board-column-3-${board.id}">Done</div>
+                    <div class="board-data-container" id="board-data-${board.id}">
+                        <div class="row">
+                            <div class="col status" id="board-column-0-${board.id}">New</div>
+                            <div class="col status" id="board-column-1-${board.id}">In progress</div>
+                            <div class="col status" id="board-column-2-${board.id}">Testing</div>
+                            <div class="col status" id="board-column-3-${board.id}">Done</div>
+                        </div>
                     </div>
                 </div>
             `;
-        }
-        const outerHtml = `${boardList}`;
-
         let boardsContainer = document.querySelector('#boards');
-        boardsContainer.insertAdjacentHTML("beforeend", outerHtml);
+        boardsContainer.insertAdjacentHTML("beforeend", boardNode);
+        const actionButtons = document.querySelectorAll('#boards > div:last-child > div > button');
 
-        let removeLinks = document.querySelectorAll('#removelink');
-        for (let removeLink of removeLinks) {
-            let linkDataset = removeLink.dataset
-            let boardID = linkDataset.boardid
-            removeLink.addEventListener('click', function() {
-                dom.removeBoards(boardID)
+        let newCardButton = actionButtons[0];
+        newCardButton.setAttribute('data-toggle', 'modal');
+        newCardButton.setAttribute('data-target', '#staticBackdrop');
+        newCardButton.setAttribute('data-boardid', `${board.id}`);
+
+        newCardButton.addEventListener('click', function() {
+            dom.createCardModal(board.id)
+        });
+        let removeLink = actionButtons[1];
+        removeLink.addEventListener('click', function() {
+            dom.removeBoards(board.id);
+        });
+
+        let showHideButton = actionButtons[2];
+        let boardId = board['id'];
+        let boardDataContainer = document.querySelector(`#board-data-${boardId}`);
+        boardDataContainer.style.display = 'none';
+        showHideButton.addEventListener('click', function () {
+            if (boardDataContainer.style.display === 'none') {
+                boardDataContainer.style.display = 'block';
+            } else {
+                boardDataContainer.style.display = 'none';
             }
-            );
-        }
-
-        let newCardButtons = document.querySelectorAll("#add-new-card");
-        for (let button of newCardButtons) {
-            let newCardDataset = button.dataset;
-            let boardId = newCardDataset.boardid;
-            button.setAttribute('data-toggle', 'modal');
-            button.setAttribute('data-target', '#staticBackdrop');
-            button.setAttribute('data-boardid', `${boardId}`);
-            button.addEventListener("click", function() {
-                dom.createCardModal(boardId)
-            })
+        })
+    },
+    showBoards: function (boards) {
+        // shows boards appending them to #boards div
+        // it adds necessary event listeners also
+        for(let board of boards) {
+            this.showBoard(board);
         }
     },
 
@@ -86,14 +96,31 @@ export let dom = {
         for(let card of cards){
             // Create card container div element
             const cardContainer = document.createElement('div');
-            cardContainer.setAttribute('class', 'card');
             cardContainer.textContent = `${card.title}`;
+            cardContainer.setAttribute('class', 'card');
+            cardContainer.setAttribute('id', `card-container-${card.id}`);
+
+            // Create trash icon
+            let trashBinIcon = document.createElement('img');
+            trashBinIcon.setAttribute('src', '../static/css/images/Trash-icon.png');
+            trashBinIcon.setAttribute('width', '36');
+            trashBinIcon.setAttribute('height', '36');
+
+            // Create trash button
+            let trashButton = document.createElement('button');
+            trashButton.style.border = 'none';
+            trashButton.style.backgroundColor = '#f7f7f7';
+            trashButton.appendChild(trashBinIcon);
+            trashButton.addEventListener('click', function () {
+                dom.removeCard(card.id);
+            });
 
             // Get the corresponding board and column for each card
             const cardBoardId = card.board_id;
             const cardStatusId = card.status_id;
             const cardColumn = document.querySelector(`#board-column-${cardStatusId}-${cardBoardId}`);
-            cardColumn.appendChild(cardContainer)
+            cardColumn.appendChild(cardContainer);
+            cardContainer.appendChild(trashButton)
         }
     },
     createCardModal: function(boardId) {
@@ -121,7 +148,6 @@ export let dom = {
     function() {
                 let cardForm = document.getElementById('createCardForm');
                 let formData = new FormData(cardForm);
-                console.log(formData);
                 dataHandler.createNewCard(formData, boardId, function () {
                     // dom.showBoards(board) => show boards needs a board parameter as an iterable array TODO
                     window.location.reload();
@@ -156,7 +182,7 @@ export let dom = {
                         let boardForm = document.getElementById('createBoardForm');
                         let formData = new FormData(boardForm);
                         dataHandler.createNewBoard(formData, function(addedBoard) {
-                            dom.showBoards(addedBoard);
+                            dom.showBoard(addedBoard);
                         });
                     }
         )
@@ -236,6 +262,7 @@ export let dom = {
                         console.log(serverResponse);
                         document.querySelector('#login').textContent = 'Logged in as ' + serverResponse.username;
                         document.querySelector('#logout').textContent = 'Logout';
+                        dom.loadBoards();
                     } else {
                         document.querySelector('.alert').style.display = 'flex';
                         document.querySelector('.alert').textContent = 'Holy guacamole! You should check in on some of those fields above.';

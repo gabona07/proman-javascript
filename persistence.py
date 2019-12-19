@@ -30,11 +30,12 @@ def _get_data(data_type, table_name, force):
 
 
 @connection.connection_handler
-def create_new_board(cursor, title_data):
+def create_new_board(cursor, title_data, userid):
     """
     Adds new table
     """
-    cursor.execute(sql.SQL("INSERT INTO {} (title) VALUES (%s) RETURNING id, title, user_id").format(sql.Identifier('boards')), [title_data])
+    cursor.execute(sql.SQL("INSERT INTO {} (title, user_id) VALUES (%s, %s) RETURNING id, title, user_id").format(
+        sql.Identifier('boards')), [title_data, userid])
     data_return = cursor.fetchone()
     return data_return
 
@@ -52,7 +53,9 @@ def create_new_card(cursor, title_data, board_id_data, status_id):
     """
     Adds new card
     """
-    cursor.execute(sql.SQL("INSERT INTO {} (title, board_id, status_id) VALUES (%s, %s, %s) RETURNING id, title").format(sql.Identifier('cards')), [title_data, board_id_data, status_id])
+    cursor.execute(
+        sql.SQL("INSERT INTO {} (title, board_id, status_id) VALUES (%s, %s, %s) RETURNING id, title").format(
+            sql.Identifier('cards')), [title_data, board_id_data, status_id])
     id_return = cursor.fetchone()
     return id_return
 
@@ -105,3 +108,8 @@ def get_user_data(cursor):
                     SELECT id, username, password FROM users
                     """)
     return cursor.fetchall()
+
+
+@connection.connection_handler
+def remove_card(cursor, card_id):
+    cursor.execute(sql.SQL("DELETE FROM {} WHERE id = (%s)").format(sql.Identifier('cards')), [card_id])

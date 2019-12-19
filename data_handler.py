@@ -12,20 +12,37 @@ def get_card_title(status_id):
     return next((status['title'] for status in statuses if str(status['id']) == str(status_id)), 'Unknown')
 
 
-def get_boards():
+def get_user_id(session):
+    if(session):
+        userid = session['user_id']
+    else:
+        userid = None
+    return userid
+
+
+def get_boards(session):
     """
     Gather all boards
     :return:
     """
-    return persistence.get_boards(force=True)
+    userid = get_user_id(session)
+    boardDatas = persistence.get_boards(force=True)
+    newBoardData = []
+    for boardData in boardDatas:
+        if((boardData['user_id'] is None) or (boardData['user_id'] == userid)):
+            newBoardData.append(boardData)
+    return newBoardData
 
 
-def create_new_board(title):
+def create_new_board(title, session):
     """
     Create new board
     """
     title_name = title['boardname']
-    return persistence.create_new_board(title_name)
+    userid = get_user_id(session)
+    return persistence.create_new_board(title_name, userid)
+
+
 
 
 def remove_board(board_id):
@@ -80,3 +97,7 @@ def get_password(username):
 
 def get_users():
     return persistence.get_user_data()
+
+
+def remove_card(card_id):
+    return persistence.remove_card(card_id)

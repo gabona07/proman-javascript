@@ -71,7 +71,6 @@ export let dataHandler = {
         // creates new board, saves it and calls the callback function with its data
         this._api_post('/create-new-board', boardTitle, (response) => {
             this._data = response;
-            response = [response];
             callback(response);
         })
     },
@@ -83,15 +82,28 @@ export let dataHandler = {
             callback(response);
         })
     },
+    removeCard: function (cardId, callback) {
+        this._api_get('/delete/card/' + `${cardId}`, (response) => {
+            this._data = response;
+            callback(response);
+        });
+    },
     registerUser: function(form, callback){
 
+        this._api_post('/register', form, function(serverResponse){
+            if(serverResponse.userid){
+                $('.modal').modal('hide');
+                console.log(serverResponse);
+            } else {
+                alert('This username has been taken');
+
+            }
         this._api_post('/register', form, (response) => {
             this._data = response;
             callback(response);
         });
     },
     loginUser: function(form, callback){
-
         this._api_post('/login', form, (response) => {
             this._data = response;
             callback(response);
