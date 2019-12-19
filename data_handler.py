@@ -11,12 +11,21 @@ def get_card_title(status_id):
     return next((status['title'] for status in statuses if str(status['id']) == str(status_id)), 'Unknown')
 
 
-def get_boards():
+def get_boards(session):
     """
     Gather all boards
     :return:
     """
-    return persistence.get_boards(force=True)
+    if(session):
+        userid = session['user_id']
+    else:
+        userid = None
+    boardDatas = persistence.get_boards(force=True)
+    newBoardData = []
+    for boardData in boardDatas:
+        if((boardData['user_id'] == None) or (boardData['user_id'] == userid)):
+            newBoardData.append(boardData)
+    return newBoardData
 
 
 def create_new_board(title):

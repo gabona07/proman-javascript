@@ -22,7 +22,7 @@ def get_boards():
     """
     All the boards
     """
-    return data_handler.get_boards()
+    return data_handler.get_boards(session=session)
 
 
 @app.route("/create-new-board", methods=['POST'])
@@ -88,7 +88,7 @@ def login():
 
 @app.route('/logout')
 def logout():
-    session.pop('username', None)
+    session.clear()
     return redirect(url_for('index'))
 
 def main():
