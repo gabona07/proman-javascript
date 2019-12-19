@@ -115,6 +115,7 @@ export let dom = {
         )
     },
     registerModal: function(){
+            document.querySelector('.alert').style.display = 'none';
             const modalBody = document.querySelector('.modal-body');
             const form = document.createElement('form');
             form.setAttribute('id', 'registerForm');
@@ -145,7 +146,8 @@ export let dom = {
             });
             modalBody.appendChild(form)
     },
-    loginModal: function(){
+    loginModal: () => {
+            document.querySelector('.alert').style.display = 'none';
             const modalBody = document.querySelector('.modal-body');
             const form = document.createElement('form');
             form.setAttribute('id', 'registerForm');

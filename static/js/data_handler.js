@@ -80,6 +80,7 @@ export let dataHandler = {
                 console.log(serverResponse);
             } else {
                 alert('This username has been taken');
+
             }
 
         });
@@ -89,9 +90,12 @@ export let dataHandler = {
             if(serverResponse.username){
                 $('.modal').modal('hide');
                 console.log(serverResponse);
-                document.querySelector('#username').textContent = 'Logged in as ' + serverResponse.username;
+                document.querySelector('#login').textContent = 'Logged in as ' + serverResponse.username;
+                document.querySelector('#logout').textContent = 'Logout';
             } else {
-                alert('Wrong username or password');
+                // alert('Wrong username or password');
+                document.querySelector('.alert').style.display = 'flex';
+                // $('.alert').alert()
             }
 
         });

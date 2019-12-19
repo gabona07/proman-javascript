@@ -10,16 +10,18 @@
         <a class="nav-link" href="#" data-toggle="modal" data-target="#staticBackdrop" id="register">Register <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
+          {% if session.username %}
+        <a class="nav-link" href="#" data-toggle="modal" data-target="#staticBackdrop" id="login">Logged in as {{ session.username }}</a>
+          {% else %}
         <a class="nav-link" href="#" data-toggle="modal" data-target="#staticBackdrop" id="login">Login</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#"  id="username">{% if session.username %}Logged in as {{ session.username }} {% endif %}</a>
+          {% endif %}
       </li>
 
     </ul>
       <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" href="/logout" id="logout">Logout</a>
+
+                <a class="nav-link" href="/logout" id="logout">{% if session.username %}Logout{% endif %}</a>
             </li>
         </ul>
   </div>
