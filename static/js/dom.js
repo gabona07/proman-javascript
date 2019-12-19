@@ -215,7 +215,17 @@ export let dom = {
 
             form.appendChild(submitButton);
             submitButton.addEventListener('click', function(){
-                dataHandler.registerUser(new FormData(form))
+                dataHandler.registerUser(new FormData(form), function(serverResponse) {
+                    if(serverResponse.userid){
+                        $('.modal').modal('hide');
+                        console.log(serverResponse);
+                    } else {
+                        document.querySelector('.alert').style.display = 'flex';
+                        document.querySelector('.alert').textContent = 'Hey mate! This username has been taken';
+
+                    }
+
+                })
             });
             modalBody.appendChild(form)
     },
@@ -246,24 +256,21 @@ export let dom = {
             submitButton.textContent = ' Submit';
             form.appendChild(submitButton);
             submitButton.addEventListener('click', function(){
-                dataHandler.loginUser(new FormData(form), function(serverResponse){
+                dataHandler.loginUser(new FormData(form), function (serverResponse) {
                     if(serverResponse.username){
                         $('.modal').modal('hide');
+                        console.log(serverResponse);
                         document.querySelector('#login').textContent = 'Logged in as ' + serverResponse.username;
                         document.querySelector('#logout').textContent = 'Logout';
                         dom.loadBoards();
                     } else {
-                        // alert('Wrong username or password');
                         document.querySelector('.alert').style.display = 'flex';
-                        // $('.alert').alert()
+                        document.querySelector('.alert').textContent = 'Holy guacamole! You should check in on some of those fields above.';
                     }
 
-                        })
+                })
             });
             modalBody.appendChild(form)
-
-    },
-    logout: function(){
 
     }
     // here comes more features

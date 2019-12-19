@@ -88,7 +88,7 @@ export let dataHandler = {
             callback(response);
         });
     },
-    registerUser: function(form){
+    registerUser: function(form, callback){
 
         this._api_post('/register', form, function(serverResponse){
             if(serverResponse.userid){
@@ -98,7 +98,9 @@ export let dataHandler = {
                 alert('This username has been taken');
 
             }
-
+        this._api_post('/register', form, (response) => {
+            this._data = response;
+            callback(response);
         });
     },
     loginUser: function(form, callback){
