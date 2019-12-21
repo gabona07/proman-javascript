@@ -49,7 +49,9 @@ def create_new_board(title, session):
     """
     title_name = title['boardname']
     userid = get_user_id(session)
-    return persistence.create_new_board(title_name, userid)
+    board = persistence.create_new_board(title_name, userid)
+    board['statuses'] = persistence.get_board_statuses(board['id'])
+    return board
 
 
 def rename_board(title, id_):

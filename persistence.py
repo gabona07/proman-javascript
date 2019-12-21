@@ -49,8 +49,12 @@ def create_new_board(cursor, title_data, userid):
     """
     cursor.execute(sql.SQL("INSERT INTO {} (title, user_id) VALUES (%s, %s) RETURNING id, title, user_id").format(
         sql.Identifier('boards')), [title_data, userid])
-    data_return = cursor.fetchone()
-    return data_return
+    board = cursor.fetchone()
+    create_new_status({'title': 'new', 'board_id': board['id']})
+    create_new_status({'title': 'in pogress', 'board_id': board['id']})
+    create_new_status({'title': 'testing', 'board_id': board['id']})
+    create_new_status({'title': 'done', 'board_id': board['id']})
+    return board
 
 
 @connection.connection_handler
@@ -75,6 +79,18 @@ def remove_board(cursor, id_data):
     cursor.execute(sql.SQL("DELETE FROM {} WHERE board_id = (%s)").format(sql.Identifier('cards')), [id_data])
     status = "{'status': 'dummy'}"
     return status
+
+
+@connection.connection_handler
+def create_new_status(cursor, status):
+    """
+    Adds new card
+    """
+    cursor.execute(
+        sql.SQL("INSERT INTO {} (title, board_id) VALUES (%s, %s) RETURNING id").format(
+            sql.Identifier('statuses')), [status['title'], status['board_id']])
+    status = cursor.fetchone()
+    return status['id']
 
 
 @connection.connection_handler
