@@ -76,6 +76,23 @@ def remove_board(board_id, session):
         return status
 
 
+def manage_status(request):
+    if request.method == 'POST':
+        return _create_new_status(request)
+
+
+def _create_new_status(request):
+    status = request.json
+    if 'board_id' not in status or 'title' not in status:
+        return _critical_error()
+    board = persistence.get_board_by_id(status['board_id'])
+    if board:
+        persistence.create_new_status(status)
+        return _as_json(200, status['title'])
+    else:
+        return _critical_error()
+
+
 def create_new_card(data, board_id):
     """
     Add new card to the first column of the given board
@@ -128,3 +145,11 @@ def get_users():
 
 def remove_card(card_id):
     return persistence.remove_card(card_id)
+
+
+def _critical_error():
+    return _as_json(400, 'Invalid request! Please refresh your browser!')
+
+
+def _as_json(status_code, message=''):
+    return {"status": status_code, "message": message}

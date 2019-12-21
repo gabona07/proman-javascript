@@ -67,6 +67,12 @@ def rename_board(cursor, title_data, id_):
 
 
 @connection.connection_handler
+def get_board_by_id(cursor, id_):
+    cursor.execute(sql.SQL("SELECT FROM {} WHERE id=%s").format(sql.Identifier('boards')), id_)
+    return cursor.fetchone()
+
+
+@connection.connection_handler
 def get_board_owner(cursor, board_id):
     cursor.execute(sql.SQL("SELECT user_id FROM boards WHERE id = (%s)"), [board_id])
     data_return = cursor.fetchone()
