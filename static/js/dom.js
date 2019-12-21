@@ -50,17 +50,22 @@ export let dom = {
                         <button class="btn btn-secondary ml-auto btn-lg" data-boardid="${board.id}" id="show-hide-data">Show / Hide</button>
                     </div>
                     <div class="board-data-container" id="board-data-${board.id}">
-                        <div class="row">
-                            <div class="col status" id="board-column-0-${board.id}">New</div>
-                            <div class="col status" id="board-column-1-${board.id}">In progress</div>
-                            <div class="col status" id="board-column-2-${board.id}">Testing</div>
-                            <div class="col status" id="board-column-3-${board.id}">Done</div>
-                        </div>
+                        <div class="row"></div>
                     </div>
                 </div>
             `;
         let boardsContainer = document.querySelector('#boards');
         boardsContainer.insertAdjacentHTML("beforeend", boardNode);
+
+        const statusContainerNode = boardsContainer.querySelector(`#board-data-${board.id} > div.row`);
+        for (let i = 0; i < board.statuses.length; i++) {
+            const statusNode = document.createElement('div');
+            statusNode.classList.add('col', 'status');
+            statusNode.setAttribute('id', `board-column-${i}-${board.id}`);
+            statusNode.innerText = board.statuses[i].title;
+            statusContainerNode.appendChild(statusNode);
+        }
+
         const actionButtons = document.querySelectorAll('#boards > div:last-child > div > button');
 
         const renameLink = actionButtons[0];

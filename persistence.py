@@ -98,6 +98,12 @@ def get_statuses(force=False):
     return _get_data('statuses', 'statuses', force)
 
 
+@connection.connection_handler
+def get_board_statuses(cursor, board_id):
+    cursor.execute(sql.SQL("SELECT id, title FROM {} WHERE board_id = (%s) ORDER BY id ASC;").format(sql.Identifier('statuses')), [board_id])
+    return cursor.fetchall()
+
+
 def get_boards(force=False):
     return _get_data('boards', 'boards', force)
 

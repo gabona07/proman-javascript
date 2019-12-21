@@ -29,7 +29,8 @@ def get_boards(session):
     boardDatas = persistence.get_boards(force=True)
     newBoardData = []
     for boardData in boardDatas:
-        if((boardData['user_id'] is None) or (boardData['user_id'] == userid)):
+        if (boardData['user_id'] is None) or (boardData['user_id'] == userid):
+            boardData['statuses'] = persistence.get_board_statuses(boardData['id'])
             newBoardData.append(boardData)
     return newBoardData
 
