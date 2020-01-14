@@ -46,21 +46,27 @@ export let dom = {
                             <i class="fas fa-pencil-alt"></i>
                         </button>
                         <button class="btn btn-secondary text-left btn-lg" data-boardid="${board.id}" id="add-new-card">+ New Card</button>
+                        <button class="btn btn-secondary text-left btn-lg" data-toggle="modal" data-target="#staticBackdrop">+ New Column</button>
                         <button class="btn btn-secondary ml-auto btn-lg"><div id="removelink" data-boardid="${board.id}">Delete Board</div></button>
                         <button class="btn btn-secondary ml-auto btn-lg" data-boardid="${board.id}" id="show-hide-data">Show / Hide</button>
                     </div>
                     <div class="board-data-container" id="board-data-${board.id}">
-                        <div class="row">
-                            <div class="col status" id="board-column-0-${board.id}">New</div>
-                            <div class="col status" id="board-column-1-${board.id}">In progress</div>
-                            <div class="col status" id="board-column-2-${board.id}">Testing</div>
-                            <div class="col status" id="board-column-3-${board.id}">Done</div>
-                        </div>
+                        <div class="row"></div>
                     </div>
                 </div>
             `;
         let boardsContainer = document.querySelector('#boards');
         boardsContainer.insertAdjacentHTML("beforeend", boardNode);
+
+        const statusContainerNode = boardsContainer.querySelector(`#board-data-${board.id} > div.row`);
+        for (let i = 0; i < board.statuses.length; i++) {
+            const statusNode = document.createElement('div');
+            statusNode.classList.add('col', 'status');
+            statusNode.setAttribute('id', `board-column-${i}-${board.id}`);
+            statusNode.innerText = board.statuses[i].title;
+            statusContainerNode.appendChild(statusNode);
+        }
+
         const actionButtons = document.querySelectorAll('#boards > div:last-child > div > button');
 
         const renameLink = actionButtons[0];
@@ -72,16 +78,21 @@ export let dom = {
         newCardButton.setAttribute('data-toggle', 'modal');
         newCardButton.setAttribute('data-target', '#staticBackdrop');
         newCardButton.setAttribute('data-boardid', `${board.id}`);
-
         newCardButton.addEventListener('click', function() {
             dom.createCardModal(board.id)
         });
-        let removeLink = actionButtons[2];
+
+        const newStatusButton = actionButtons[2];
+        newStatusButton.addEventListener('click', function() {
+            dom.createStatusModal(board.id)
+        });
+
+        let removeLink = actionButtons[3];
         removeLink.addEventListener('click', function() {
             dom.removeBoards(board.id);
         });
 
-        let showHideButton = actionButtons[3];
+        let showHideButton = actionButtons[4];
         let boardId = board['id'];
         let boardDataContainer = document.querySelector(`#board-data-${boardId}`);
         boardDataContainer.style.display = 'none';
@@ -99,6 +110,47 @@ export let dom = {
         for(let board of boards) {
             this.showBoard(board);
         }
+    },
+
+    createStatusModal: function(boardId) {
+        document.querySelector('.alert').style.display = 'none';
+        const modalBody = document.querySelector('.modal-body');
+        modalBody.innerHTML = '';
+        document.querySelector('#modalTitle').textContent = 'Add New Column';
+        const form = document.createElement('form');
+        const boardIdNode = document.createElement('input');
+        boardIdNode.setAttribute('type', 'hidden');
+        boardIdNode.setAttribute('name', 'board_id');
+        boardIdNode.setAttribute('value', boardId);
+        form.appendChild(boardIdNode);
+        const input = document.createElement('input');
+        input.setAttribute('type', 'text');
+        input.setAttribute('placeholder', 'Column name');
+        input.setAttribute('name', 'title');
+        input.setAttribute('autocomplete', 'off');
+        input.setAttribute('required', 'required');
+        form.appendChild(input);
+        const addButton = document.createElement('a');
+        addButton.setAttribute('type', 'submit');
+        addButton.setAttribute('data-dismiss','modal');
+        addButton.classList.add('btn', 'btn-secondary');
+        addButton.textContent = 'Add Column';
+        form.appendChild(addButton);
+        modalBody.appendChild(form);
+        addButton.addEventListener('click', function() {
+            const formData = new FormData(form);
+            dataHandler.createNewStatus(formData, function (response) {
+                if (response.status === 200) {
+                    const boardNode = document.querySelector(`#board-data-${boardId} > div.row`);
+                    const statusNode = document.createElement('div');
+                    const statusOrder = boardNode.childNodes.length;
+                    statusNode.classList.add('col', 'status');
+                    statusNode.setAttribute('id', `board-column-${statusOrder}-${boardId}`);
+                    statusNode.textContent = response.message;
+                    boardNode.appendChild(statusNode);
+                }
+            });
+        });
     },
 
     loadCards: function (boardId) {
@@ -158,7 +210,7 @@ export let dom = {
         addButton.setAttribute('type', 'submit');
         addButton.setAttribute('id','addCardButton');
         addButton.setAttribute('data-dismiss','modal');
-        addButton.classList.add('btn', 'btn-primary');
+        addButton.classList.add('btn', 'btn-secondary');
         addButton.textContent = 'Add Card';
         form.appendChild(addButton);
         modalBody.appendChild(form);
@@ -191,7 +243,7 @@ export let dom = {
         addButton.setAttribute('type', 'button');
         addButton.setAttribute('id','addButton');
         addButton.setAttribute('data-dismiss','modal');
-        addButton.classList.add('btn', 'btn-primary');
+        addButton.setAttribute('class','btn btn-secondary');
         addButton.textContent = 'Submit';
         form.appendChild(addButton);
         modalBody.appendChild(form);
@@ -223,7 +275,7 @@ export let dom = {
         addButton.setAttribute('type', 'submit');
         addButton.setAttribute('id', 'addRenameButton');
         addButton.setAttribute('data-dismiss', 'modal');
-        addButton.classList.add('btn', 'btn-primary');
+        addButton.setAttribute('class', 'btn btn-secondary');
         addButton.textContent = 'Submit';
         form.appendChild(addButton);
         modalBody.appendChild(form);

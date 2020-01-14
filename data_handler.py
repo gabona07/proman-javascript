@@ -29,7 +29,8 @@ def get_boards(session):
     boardDatas = persistence.get_boards(force=True)
     newBoardData = []
     for boardData in boardDatas:
-        if((boardData['user_id'] is None) or (boardData['user_id'] == userid)):
+        if (boardData['user_id'] is None) or (boardData['user_id'] == userid):
+            boardData['statuses'] = persistence.get_board_statuses(boardData['id'])
             newBoardData.append(boardData)
     return newBoardData
 
@@ -48,7 +49,9 @@ def create_new_board(title, session):
     """
     title_name = title['boardname']
     userid = get_user_id(session)
-    return persistence.create_new_board(title_name, userid)
+    board = persistence.create_new_board(title_name, userid)
+    board['statuses'] = persistence.get_board_statuses(board['id'])
+    return board
 
 
 def rename_board(title, id_):
@@ -71,6 +74,23 @@ def remove_board(board_id, session):
     else:
         status = "{'status': 'you are not the owner'}"
         return status
+
+
+def manage_status(request):
+    if request.method == 'POST':
+        return _create_new_status(request)
+
+
+def _create_new_status(request):
+    status = request.json
+    if 'board_id' not in status or 'title' not in status:
+        return _critical_error()
+    board = persistence.get_board_by_id(status['board_id'])
+    if board:
+        persistence.create_new_status(status)
+        return _as_json(200, status['title'])
+    else:
+        return _critical_error()
 
 
 def create_new_card(data, board_id):
@@ -125,3 +145,11 @@ def get_users():
 
 def remove_card(card_id):
     return persistence.remove_card(card_id)
+
+
+def _critical_error():
+    return _as_json(400, 'Invalid request! Please refresh your browser!')
+
+
+def _as_json(status_code, message=''):
+    return {"status": status_code, "message": message}
