@@ -45,6 +45,12 @@ def create_new_board():
         return data_handler.create_new_board(title, session)
 
 
+@app.route("/status", methods=['POST'])
+@json_response
+def manage_status():
+    return data_handler.manage_status(request)
+
+
 @app.route("/create-new-card-<int:board_id>", methods=['POST'])
 @json_response
 def create_new_card(board_id: int):

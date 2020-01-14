@@ -49,8 +49,12 @@ def create_new_board(cursor, title_data, userid):
     """
     cursor.execute(sql.SQL("INSERT INTO {} (title, user_id) VALUES (%s, %s) RETURNING id, title, user_id").format(
         sql.Identifier('boards')), [title_data, userid])
-    data_return = cursor.fetchone()
-    return data_return
+    board = cursor.fetchone()
+    create_new_status({'title': 'new', 'board_id': board['id']})
+    create_new_status({'title': 'in pogress', 'board_id': board['id']})
+    create_new_status({'title': 'testing', 'board_id': board['id']})
+    create_new_status({'title': 'done', 'board_id': board['id']})
+    return board
 
 
 @connection.connection_handler
@@ -60,6 +64,12 @@ def rename_board(cursor, title_data, id_):
     """
     cursor.execute(sql.SQL("UPDATE {} SET title = %s WHERE id=%s").format(sql.Identifier('boards')), (title_data, id_))
     return id_
+
+
+@connection.connection_handler
+def get_board_by_id(cursor, id_):
+    cursor.execute(sql.SQL("SELECT FROM {} WHERE id=%s").format(sql.Identifier('boards')), id_)
+    return cursor.fetchone()
 
 
 @connection.connection_handler
@@ -75,6 +85,18 @@ def remove_board(cursor, id_data):
     cursor.execute(sql.SQL("DELETE FROM {} WHERE board_id = (%s)").format(sql.Identifier('cards')), [id_data])
     status = "{'status': 'dummy'}"
     return status
+
+
+@connection.connection_handler
+def create_new_status(cursor, status):
+    """
+    Adds new card
+    """
+    cursor.execute(
+        sql.SQL("INSERT INTO {} (title, board_id) VALUES (%s, %s) RETURNING id").format(
+            sql.Identifier('statuses')), [status['title'], status['board_id']])
+    status = cursor.fetchone()
+    return status['id']
 
 
 @connection.connection_handler
@@ -96,6 +118,12 @@ def clear_cache():
 
 def get_statuses(force=False):
     return _get_data('statuses', 'statuses', force)
+
+
+@connection.connection_handler
+def get_board_statuses(cursor, board_id):
+    cursor.execute(sql.SQL("SELECT id, title FROM {} WHERE board_id = (%s) ORDER BY id ASC;").format(sql.Identifier('statuses')), [board_id])
+    return cursor.fetchall()
 
 
 def get_boards(force=False):
