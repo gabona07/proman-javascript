@@ -147,6 +147,10 @@ def remove_card(card_id):
     return persistence.remove_card(card_id)
 
 
+def move_card(card_id, column_id, board_id):
+    return persistence.move_card(card_id, column_id, board_id)
+
+
 def _critical_error():
     return _as_json(400, 'Invalid request! Please refresh your browser!')
 

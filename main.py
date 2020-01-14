@@ -95,6 +95,12 @@ def remove_card(card_id: int):
     return data_handler.remove_card(card_id)
 
 
+@app.route("/move-card/<int:board_id>/<int:column_id>/<int:card_id>")
+@json_response
+def move_card(card_id: int, column_id: int, board_id: int):
+    return data_handler.move_card(card_id, column_id, board_id)
+
+
 @app.route('/register', methods=['POST'])
 def register():
     if request.method == 'POST':

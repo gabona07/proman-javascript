@@ -116,6 +116,11 @@ export let dataHandler = {
             this._data = response;
             callback(response);
         });
+    },
+    moveCard: function (cardId, columnId, boardId, callback) {
+        this._api_get('move-card/' + `${boardId}/` + `${columnId}/` + `${cardId}`, (response) =>{
+            callback(response);
+        } )
     }
     // here comes more features
 };

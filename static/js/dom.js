@@ -61,8 +61,10 @@ export let dom = {
         const statusContainerNode = boardsContainer.querySelector(`#board-data-${board.id} > div.row`);
         for (let i = 0; i < board.statuses.length; i++) {
             const statusNode = document.createElement('div');
-            statusNode.classList.add('col', 'status');
+            statusNode.classList.add('col', 'status', 'dropzone');
             statusNode.setAttribute('id', `board-column-${i}-${board.id}`);
+            statusNode.setAttribute('data-column-id', `${board.statuses[i].id}`);
+            statusNode.setAttribute('data-board-id', `${board.id}`);
             statusNode.innerText = board.statuses[i].title;
             statusContainerNode.appendChild(statusNode);
         }
@@ -111,7 +113,6 @@ export let dom = {
             this.showBoard(board);
         }
     },
-
     createStatusModal: function(boardId) {
         document.querySelector('.alert').style.display = 'none';
         const modalBody = document.querySelector('.modal-body');
@@ -152,7 +153,6 @@ export let dom = {
             });
         });
     },
-
     loadCards: function (boardId) {
         // retrieves cards and makes showCards called
         dataHandler.getCardsByBoardId(boardId, function (cards) {
@@ -162,12 +162,42 @@ export let dom = {
     showCards: function (cards) {
         // shows the cards of a board
         // it adds necessary event listeners also
-        for(let card of cards){
+        for(let card of cards) {
+
             // Create card container div element
             const cardContainer = document.createElement('div');
             cardContainer.textContent = `${card.title}`;
-            cardContainer.setAttribute('class', 'card');
+            cardContainer.setAttribute('class', 'card draggable');
+            cardContainer.setAttribute('draggable', 'true');
             cardContainer.setAttribute('id', `card-container-${card.id}`);
+            cardContainer.setAttribute('data-card-id', `${card.id}`);
+            cardContainer.setAttribute('data-column-id', `${card.status_id}`);
+            cardContainer.setAttribute('data-board-id', `${card.board_id}`);
+            cardContainer.addEventListener('dragstart', () => handleDragAndDrop(cardContainer));
+
+            function handleDragAndDrop(draggedCard) {
+                draggedCard.classList.add('dragged');
+                const dropzones = document.querySelectorAll(".dropzone");
+                for (let dropzone of dropzones) {
+                    dropzone.addEventListener("dragover", function (evt) {
+                        evt.preventDefault();
+                    });
+                    dropzone.addEventListener("drop", function (evt) {
+                        evt.preventDefault();
+                        if (evt.target !== draggedCard.parentNode && evt.target !== draggedCard && draggedCard.classList == 'card draggable dragged') {
+                            draggedCard.parentNode.removeChild(draggedCard);
+                            evt.target.appendChild(draggedCard);
+                            draggedCard.classList.remove('dragged');
+                            const draggedCardId = draggedCard.dataset.cardId;
+                            const parentColumnId = draggedCard.parentNode.dataset.columnId;
+                            const parentBoardId = draggedCard.parentNode.dataset.boardId;
+                            dataHandler.moveCard(draggedCardId, parentColumnId, parentBoardId, function () {
+                                window.location.reload();
+                            })
+                        }
+                    });
+                }
+            }
 
             // Create trash icon
             let trashBinIcon = document.createElement('img');
@@ -189,7 +219,8 @@ export let dom = {
             const cardStatusId = card.status_id;
             const cardColumn = document.querySelector(`#board-column-${cardStatusId}-${cardBoardId}`);
             cardColumn.appendChild(cardContainer);
-            cardContainer.appendChild(trashButton)
+            cardContainer.appendChild(trashButton);
+
         }
     },
     createCardModal: function(boardId) {
@@ -374,7 +405,5 @@ export let dom = {
                 })
             });
             modalBody.appendChild(form)
-
-    }
-    // here comes more features
+    },
 };
