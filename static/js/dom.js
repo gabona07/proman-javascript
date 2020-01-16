@@ -62,7 +62,7 @@ export let dom = {
         for (let i = 0; i < board.statuses.length; i++) {
             const statusNode = document.createElement('div');
             statusNode.classList.add('col', 'status', 'dropzone');
-            statusNode.setAttribute('id', `board-column-${i}-${board.id}`);
+            statusNode.setAttribute('id', `board-column-${board.statuses[i].id}-${board.id}`);
             statusNode.setAttribute('data-column-id', `${board.statuses[i].id}`);
             statusNode.setAttribute('data-board-id', `${board.id}`);
             statusNode.innerText = board.statuses[i].title;
@@ -145,8 +145,10 @@ export let dom = {
                     const boardNode = document.querySelector(`#board-data-${boardId} > div.row`);
                     const statusNode = document.createElement('div');
                     const statusOrder = boardNode.childNodes.length;
-                    statusNode.classList.add('col', 'status');
+                    statusNode.classList.add('col', 'status', 'dropzone');
                     statusNode.setAttribute('id', `board-column-${statusOrder}-${boardId}`);
+                    statusNode.setAttribute('data-column-id', `${statusOrder}`);
+                    statusNode.setAttribute('data-board-id', `${boardId}`);
                     statusNode.textContent = response.message;
                     boardNode.appendChild(statusNode);
                 }
