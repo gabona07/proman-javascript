@@ -87,8 +87,9 @@ def _create_new_status(request):
         return _critical_error()
     board = persistence.get_board_by_id(status['board_id'])
     if board:
-        persistence.create_new_status(status)
-        return _as_json(200, status['title'])
+        status_id = persistence.create_new_status(status)
+        status = {'status_name': status['title'], 'status_id': status_id}
+        return _as_json(200, status)
     else:
         return _critical_error()
 
@@ -155,5 +156,5 @@ def _critical_error():
     return _as_json(400, 'Invalid request! Please refresh your browser!')
 
 
-def _as_json(status_code, message=''):
+def _as_json(status_code, message=None):
     return {"status": status_code, "message": message}

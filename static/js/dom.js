@@ -144,12 +144,11 @@ export let dom = {
                 if (response.status === 200) {
                     const boardNode = document.querySelector(`#board-data-${boardId} > div.row`);
                     const statusNode = document.createElement('div');
-                    const statusOrder = boardNode.childNodes.length;
                     statusNode.classList.add('col', 'status', 'dropzone');
-                    statusNode.setAttribute('id', `board-column-${statusOrder}-${boardId}`);
-                    statusNode.setAttribute('data-column-id', `${statusOrder}`);
+                    statusNode.setAttribute('id', `board-column-${response.message.status_id}-${boardId}`);
+                    statusNode.setAttribute('data-column-id', `${response.message.status_id}`);
                     statusNode.setAttribute('data-board-id', `${boardId}`);
-                    statusNode.textContent = response.message;
+                    statusNode.textContent = response.message['status_name'];
                     boardNode.appendChild(statusNode);
                 }
             });
@@ -350,7 +349,6 @@ export let dom = {
                 dataHandler.registerUser(new FormData(form), function(serverResponse) {
                     if(serverResponse.userid){
                         $('.modal').modal('hide');
-                        console.log(serverResponse);
                     } else {
                         document.querySelector('.alert').style.display = 'flex';
                         document.querySelector('.alert').textContent = 'Hey mate! This username has been taken';
@@ -391,7 +389,6 @@ export let dom = {
                 dataHandler.loginUser(new FormData(form), function (serverResponse) {
                     if(serverResponse.username){
                         $('.modal').modal('hide');
-                        console.log(serverResponse);
                         document.querySelector('#login').textContent = 'Logged in as ' + serverResponse.username;
                         document.querySelector('#logout').textContent = 'Logout';
                         dom.loadBoards();
