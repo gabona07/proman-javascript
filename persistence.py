@@ -170,3 +170,14 @@ def get_user_data(cursor):
 @connection.connection_handler
 def remove_card(cursor, card_id):
     cursor.execute(sql.SQL("DELETE FROM {} WHERE id = (%s)").format(sql.Identifier('cards')), [card_id])
+
+
+@connection.connection_handler
+def move_card(cursor, card_id, column_id, board_id):
+    return cursor.execute("""
+        UPDATE cards
+        SET board_id = %s, status_id = %s
+        WHERE id = %s""", [board_id, column_id, card_id])
+
+
+

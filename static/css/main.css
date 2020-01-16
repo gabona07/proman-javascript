@@ -73,3 +73,7 @@ input {
     color: rgba(238,228,218,0.72);
     font-size: 74px;
 }
+
+.dropzone {
+    padding-bottom: 50px;
+}
