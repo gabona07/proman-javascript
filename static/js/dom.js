@@ -81,7 +81,7 @@ export let dom = {
         newCardButton.setAttribute('data-target', '#staticBackdrop');
         newCardButton.setAttribute('data-boardid', `${board.id}`);
         newCardButton.addEventListener('click', function() {
-            dom.createCardModal(board.id)
+            dom.createCardModal(board.id, `${board.statuses[0].id}`)
         });
 
         const newStatusButton = actionButtons[2];
@@ -144,12 +144,11 @@ export let dom = {
                 if (response.status === 200) {
                     const boardNode = document.querySelector(`#board-data-${boardId} > div.row`);
                     const statusNode = document.createElement('div');
-                    const statusOrder = boardNode.childNodes.length;
                     statusNode.classList.add('col', 'status', 'dropzone');
-                    statusNode.setAttribute('id', `board-column-${statusOrder}-${boardId}`);
-                    statusNode.setAttribute('data-column-id', `${statusOrder}`);
+                    statusNode.setAttribute('id', `board-column-${response.message.status_id}-${boardId}`);
+                    statusNode.setAttribute('data-column-id', `${response.message.status_id}`);
                     statusNode.setAttribute('data-board-id', `${boardId}`);
-                    statusNode.textContent = response.message;
+                    statusNode.textContent = response.message['status_name'];
                     boardNode.appendChild(statusNode);
                 }
             });
@@ -221,7 +220,7 @@ export let dom = {
             }
         }
     },
-    createCardModal: function(boardId) {
+    createCardModal: function(boardId, columnId) {
         document.querySelector('.alert').style.display = 'none';
         const modalBody = document.querySelector('.modal-body');
         modalBody.innerHTML = '';
@@ -247,7 +246,7 @@ export let dom = {
     function() {
                 let cardForm = document.getElementById('createCardForm');
                 let formData = new FormData(cardForm);
-                dataHandler.createNewCard(formData, boardId, function () {
+                dataHandler.createNewCard(formData, boardId, columnId, function () {
                     // dom.showBoards(board) => show boards needs a board parameter as an iterable array TODO
                     window.location.reload();
                 })
@@ -350,7 +349,6 @@ export let dom = {
                 dataHandler.registerUser(new FormData(form), function(serverResponse) {
                     if(serverResponse.userid){
                         $('.modal').modal('hide');
-                        console.log(serverResponse);
                     } else {
                         document.querySelector('.alert').style.display = 'flex';
                         document.querySelector('.alert').textContent = 'Hey mate! This username has been taken';
@@ -391,7 +389,6 @@ export let dom = {
                 dataHandler.loginUser(new FormData(form), function (serverResponse) {
                     if(serverResponse.username){
                         $('.modal').modal('hide');
-                        console.log(serverResponse);
                         document.querySelector('#login').textContent = 'Logged in as ' + serverResponse.username;
                         document.querySelector('#logout').textContent = 'Logout';
                         dom.loadBoards();
