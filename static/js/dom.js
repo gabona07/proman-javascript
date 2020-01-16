@@ -175,6 +175,26 @@ export let dom = {
             cardContainer.setAttribute('data-board-id', `${card.board_id}`);
             cardContainer.addEventListener('dragstart', () => handleDragAndDrop(cardContainer));
 
+            // Create trash icon
+            let trashBinIcon = document.createElement('img');
+            trashBinIcon.setAttribute('src', '../static/css/images/Trash-icon.png');
+            trashBinIcon.setAttribute('width', '36');
+            trashBinIcon.setAttribute('height', '36');
+
+            // Create trash button
+            let trashButton = document.createElement('button');
+            trashButton.style.border = 'none';
+            trashButton.style.backgroundColor = '#f7f7f7';
+            trashButton.appendChild(trashBinIcon);
+            trashButton.addEventListener('click', function () {
+                dom.removeCard(card.id);
+            });
+
+            // Get the corresponding board and column for each card
+            const cardColumn = document.querySelector(`#board-column-${card.status_id}-${card.board_id}`);
+            cardColumn.appendChild(cardContainer);
+            cardContainer.appendChild(trashButton);
+
             function handleDragAndDrop(draggedCard) {
                 draggedCard.classList.add('dragged');
                 const dropzones = document.querySelectorAll(".dropzone");
@@ -192,35 +212,11 @@ export let dom = {
                             const parentColumnId = draggedCard.parentNode.dataset.columnId;
                             const parentBoardId = draggedCard.parentNode.dataset.boardId;
                             dataHandler.moveCard(draggedCardId, parentColumnId, parentBoardId, function () {
-                                window.location.reload();
                             })
                         }
                     });
                 }
             }
-
-            // Create trash icon
-            let trashBinIcon = document.createElement('img');
-            trashBinIcon.setAttribute('src', '../static/css/images/Trash-icon.png');
-            trashBinIcon.setAttribute('width', '36');
-            trashBinIcon.setAttribute('height', '36');
-
-            // Create trash button
-            let trashButton = document.createElement('button');
-            trashButton.style.border = 'none';
-            trashButton.style.backgroundColor = '#f7f7f7';
-            trashButton.appendChild(trashBinIcon);
-            trashButton.addEventListener('click', function () {
-                dom.removeCard(card.id);
-            });
-
-            // Get the corresponding board and column for each card
-            const cardBoardId = card.board_id;
-            const cardStatusId = card.status_id;
-            const cardColumn = document.querySelector(`#board-column-${cardStatusId}-${cardBoardId}`);
-            cardColumn.appendChild(cardContainer);
-            cardContainer.appendChild(trashButton);
-
         }
     },
     createCardModal: function(boardId) {
