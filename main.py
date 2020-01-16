@@ -51,15 +51,15 @@ def manage_status():
     return data_handler.manage_status(request)
 
 
-@app.route("/create-new-card-<int:board_id>", methods=['POST'])
+@app.route("/create-new-card-<int:board_id>-<int:status_id>", methods=['POST'])
 @json_response
-def create_new_card(board_id: int):
+def create_new_card(board_id: int, status_id: int):
     """
     Create new board
     """
     if request.method == 'POST':
         data = request.json
-        return data_handler.create_new_card(data, board_id)
+        return data_handler.create_new_card(data, board_id, status_id)
 
 
 @app.route("/rename-board/<board_id>", methods=['POST'])

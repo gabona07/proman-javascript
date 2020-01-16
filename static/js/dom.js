@@ -81,7 +81,7 @@ export let dom = {
         newCardButton.setAttribute('data-target', '#staticBackdrop');
         newCardButton.setAttribute('data-boardid', `${board.id}`);
         newCardButton.addEventListener('click', function() {
-            dom.createCardModal(board.id)
+            dom.createCardModal(board.id, `${board.statuses[0].id}`)
         });
 
         const newStatusButton = actionButtons[2];
@@ -220,7 +220,7 @@ export let dom = {
             }
         }
     },
-    createCardModal: function(boardId) {
+    createCardModal: function(boardId, columnId) {
         document.querySelector('.alert').style.display = 'none';
         const modalBody = document.querySelector('.modal-body');
         modalBody.innerHTML = '';
@@ -246,7 +246,7 @@ export let dom = {
     function() {
                 let cardForm = document.getElementById('createCardForm');
                 let formData = new FormData(cardForm);
-                dataHandler.createNewCard(formData, boardId, function () {
+                dataHandler.createNewCard(formData, boardId, columnId, function () {
                     // dom.showBoards(board) => show boards needs a board parameter as an iterable array TODO
                     window.location.reload();
                 })

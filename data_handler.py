@@ -94,12 +94,11 @@ def _create_new_status(request):
         return _critical_error()
 
 
-def create_new_card(data, board_id):
+def create_new_card(data, board_id, status_id):
     """
     Add new card to the first column of the given board
     """
     card_title = data['card-title']
-    status_id = 0
     return persistence.create_new_card(card_title, board_id, status_id)
 
 
