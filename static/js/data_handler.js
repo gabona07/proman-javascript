@@ -90,9 +90,9 @@ export let dataHandler = {
             callback(response);
         });
     },
-    createNewCard: function (cardTitle, boardId, callback) {
+    createNewCard: function (cardTitle, boardId, statusId, callback) {
         // creates new card, saves it and calls the callback function with its data
-        this._api_post('/create-new-card-' + `${boardId}`, cardTitle, (response) => {
+        this._api_post(`/create-new-card-${boardId}-${statusId}`, cardTitle,  (response) => {
             this._data = response;
             response = [response];
             callback(response);
@@ -123,6 +123,11 @@ export let dataHandler = {
             this._data = response;
             callback(response);
         });
+    },
+    moveCard: function (cardId, columnId, boardId, callback) {
+        this._api_get('move-card/' + `${boardId}/` + `${columnId}/` + `${cardId}`, (response) =>{
+            callback(response);
+        } )
     }
     // here comes more features
 };
