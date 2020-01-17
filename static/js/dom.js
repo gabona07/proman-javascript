@@ -204,7 +204,6 @@ export let dom = {
 
             // Create card container div element
             const cardContainer = document.createElement('div');
-            cardContainer.textContent = `${card.title}`;
             cardContainer.setAttribute('class', 'card draggable');
             cardContainer.setAttribute('draggable', 'true');
             cardContainer.setAttribute('id', `card-container-${card.id}`);
