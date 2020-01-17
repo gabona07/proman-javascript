@@ -109,6 +109,12 @@ def create_new_card(cursor, title_data, board_id_data, status_id):
     return id_return
 
 
+@connection.connection_handler
+def edit_card(cursor, board_id, card_id, card_title):
+    cursor.execute(sql.SQL("UPDATE {} SET title = (%s) WHERE board_id = (%s) AND id = (%s)").format(sql.Identifier('cards')), [card_title, board_id, card_id])
+    return card_title
+
+
 def clear_cache():
     for k in list(_cache.keys()):
         _cache.pop(k)

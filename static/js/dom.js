@@ -18,7 +18,43 @@ export let dom = {
     removeCard: function(cardId) {
         let cardDiv = "card-container-" + cardId;
         document.getElementById(cardDiv).remove();
-        dataHandler.removeCard(cardId, function () {})
+        dataHandler.removeCard(cardId, function (){})
+    },
+    editCard: function(cardID, cardBoardId) {
+        let DivName = "card-container-" + cardID;
+        let containerDiv = document.getElementById(DivName);
+        if(!containerDiv.classList.contains("active")) {
+            containerDiv.classList.add("active");
+
+            let cardDivName = ".card-container-" + cardID + "-text";
+            let textDiv = document.querySelector(cardDivName);
+            let cardTitle = textDiv.textContent;
+            textDiv.style.display = textDiv.style.display === 'none' ? '' : 'none';
+
+            let inputDivName = ".card-container-" + cardID + "-input";
+            let inputDiv = document.querySelector(inputDivName);
+            inputDiv.innerHTML = `<input name="text" id="textinput-${cardID}" type="text" value="${cardTitle}"/>`;
+            inputDiv.style.display = inputDiv.style.display === 'none' ? '' : 'none';
+
+            document.querySelector(`#textinput-${cardID}`).addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    let inputContent  = document.getElementById(`textinput-${cardID}`).value;
+                    let form_data = new FormData();
+                    form_data.append('card-title', inputContent);
+                    dataHandler.editCard(cardID, form_data, cardBoardId, function(response){
+                        textDiv.innerHTML = response[0];
+                        textDiv.style.display = textDiv.style.display === 'none' ? '' : 'none';
+
+                        inputDiv.style.display = inputDiv.style.display === 'none' ? '' : 'none';
+                        inputDiv.innerHTML = "";
+
+                        containerDiv.classList.remove("active");
+                    });
+                }
+            });
+
+            document.getElementById(`textinput-${cardID}`).focus();
+        }
     },
     loadBoards: function () {
         // retrieves boards and makes showBoards called
@@ -163,11 +199,24 @@ export let dom = {
         // shows the cards of a board
         // it adds necessary event listeners also
         for(let card of cards){
+            const cardBoardId = card.board_id;
+
             // Create card container div element
             const cardContainer = document.createElement('div');
-            cardContainer.textContent = `${card.title}`;
             cardContainer.setAttribute('class', 'card');
             cardContainer.setAttribute('id', `card-container-${card.id}`);
+
+            const textContainer = document.createElement('div');
+            textContainer.textContent = `${card.title}`;
+            textContainer.setAttribute('class', `card-container-${card.id}-text`);
+            textContainer.style.display = 'show';
+            textContainer.addEventListener('click', function() {
+                dom.editCard(card.id,cardBoardId);
+            });
+
+            const inputContainer = document.createElement('div');
+            inputContainer.setAttribute('class', `card-container-${card.id}-input`);
+            inputContainer.style.display = "none";
 
             // Create trash icon
             let trashBinIcon = document.createElement('img');
@@ -185,11 +234,12 @@ export let dom = {
             });
 
             // Get the corresponding board and column for each card
-            const cardBoardId = card.board_id;
             const cardStatusId = card.status_id;
             const cardColumn = document.querySelector(`#board-column-${cardStatusId}-${cardBoardId}`);
             cardColumn.appendChild(cardContainer);
-            cardContainer.appendChild(trashButton)
+            cardContainer.appendChild(textContainer);
+            cardContainer.appendChild(inputContainer);
+            cardContainer.appendChild(trashButton);
         }
     },
     createCardModal: function(boardId) {
@@ -321,7 +371,6 @@ export let dom = {
                 dataHandler.registerUser(new FormData(form), function(serverResponse) {
                     if(serverResponse.userid){
                         $('.modal').modal('hide');
-                        console.log(serverResponse);
                     } else {
                         document.querySelector('.alert').style.display = 'flex';
                         document.querySelector('.alert').textContent = 'Hey mate! This username has been taken';
@@ -362,7 +411,6 @@ export let dom = {
                 dataHandler.loginUser(new FormData(form), function (serverResponse) {
                     if(serverResponse.username){
                         $('.modal').modal('hide');
-                        console.log(serverResponse);
                         document.querySelector('#login').textContent = 'Logged in as ' + serverResponse.username;
                         document.querySelector('#logout').textContent = 'Logout';
                         dom.loadBoards();

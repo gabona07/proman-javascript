@@ -34,6 +34,14 @@ def get_board(board_id):
     return data_handler.get_board(board_id)
 
 
+@app.route("/edit/card/<board_id>-<card_id>", methods=['POST'])
+@json_response
+def edit_card(board_id, card_id):
+    if request.method == 'POST':
+        title = request.json
+        return data_handler.edit_card(title, session, card_id, board_id)
+
+
 @app.route("/create-new-board", methods=['POST'])
 @json_response
 def create_new_board():
