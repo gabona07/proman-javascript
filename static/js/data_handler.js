@@ -49,12 +49,6 @@ export let dataHandler = {
             callback(response);
         });
     },
-    getStatuses: function (callback) {
-        // the statuses are retrieved and then the callback function is called with the statuses
-    },
-    getStatus: function (statusId, callback) {
-        // the status is retrieved and then the callback function is called with the status
-    },
     removeBoard: function(boardId, callback) {
         this._api_get('/delete/board/' + `${boardId}`, (response) => {
             this._data = response;
@@ -74,9 +68,6 @@ export let dataHandler = {
             this._data = response;
             callback(response);
         });
-    },
-    getCard: function (cardId, callback) {
-        // the card is retrieved and then the callback function is called with the card
     },
     createNewBoard: function (boardTitle, callback) {
         // creates new board, saves it and calls the callback function with its data
