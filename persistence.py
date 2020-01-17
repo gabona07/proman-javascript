@@ -58,12 +58,10 @@ def create_new_board(cursor, title_data, userid):
 
 
 @connection.connection_handler
-def rename_board(cursor, title_data, id_):
-    """
-    Rename board
-    """
-    cursor.execute(sql.SQL("UPDATE {} SET title = %s WHERE id=%s").format(sql.Identifier('boards')), (title_data, id_))
-    return id_
+def get_board_owner(cursor, board_id):
+    cursor.execute(sql.SQL("SELECT user_id FROM boards WHERE id = (%s)"), [board_id])
+    data_return = cursor.fetchone()
+    return data_return
 
 
 @connection.connection_handler
@@ -109,6 +107,12 @@ def create_new_card(cursor, title_data, board_id_data, status_id):
             sql.Identifier('cards')), [title_data, board_id_data, status_id])
     id_return = cursor.fetchone()
     return id_return
+
+
+@connection.connection_handler
+def edit_card(cursor, board_id, card_id, card_title):
+    cursor.execute(sql.SQL("UPDATE {} SET title = (%s) WHERE board_id = (%s) AND id = (%s)").format(sql.Identifier('cards')), [card_title, board_id, card_id])
+    return card_title
 
 
 def clear_cache():

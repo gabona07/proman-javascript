@@ -61,6 +61,13 @@ export let dataHandler = {
             callback(response);
         });
     },
+    editCard: function(cardID, cardTitle, cardBoardId, callback) {
+        this._api_post('/edit/card/' + `${cardBoardId}` + '-' + `${cardID}`, cardTitle, (response) => {
+            this._data = response;
+            response = [response];
+            callback(response);
+        });
+    },
     getCardsByBoardId: function (boardId, callback) {
         // the cards are retrieved and then the callback function is called with the cards
         this._api_get('/get-cards/' + `${boardId}`, (response) => {

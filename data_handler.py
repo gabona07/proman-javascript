@@ -102,6 +102,18 @@ def create_new_card(data, board_id, status_id):
     return persistence.create_new_card(card_title, board_id, status_id)
 
 
+def edit_card(title, session, card_id, board_id):
+    userid = get_user_id(session)
+    ownerid_data = persistence.get_board_owner(board_id)
+    ownerid = ownerid_data['user_id']
+    if ((ownerid is None) or (ownerid == userid)):
+        card_title = title['card-title']
+        return persistence.edit_card(board_id, card_id, card_title)
+    else:
+        status = "{'status': 'you are not the owner'}"
+        return status
+
+
 def get_cards_by_board_id(board_id):
     persistence.clear_cache()
     all_cards = persistence.get_cards()
